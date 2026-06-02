@@ -1,0 +1,299 @@
+{
+  "name": "Ngondet Studio — Pipeline Visuels IA v2 (Claude + Orshot)",
+  "nodes": [
+    {
+      "id": "node-webhook",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generer-visuel",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "node-supabase-client",
+      "name": "Supabase — Charte Client",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://kvucdlvbxlmvnrzvtcgv.supabase.co/rest/v1/clients?id=eq.' + $json.client_id + '&select=*' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "sb_publishable_z-vrTzV72qPVPBtgWWgyBg_kcHmFzQA" },
+            { "name": "Authorization", "value": "Bearer sb_publishable_z-vrTzV72qPVPBtgWWgyBg_kcHmFzQA" }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "node-extract-client",
+      "name": "Extraire Client Supabase",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 300],
+      "parameters": {
+        "jsCode": "const supabaseData = $input.item.json;\nconst client = Array.isArray(supabaseData) ? supabaseData[0] : supabaseData;\nreturn [{ json: client }];"
+      }
+    },
+    {
+      "id": "node-switch",
+      "name": "Switch — Approche",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [860, 300],
+      "parameters": {
+        "mode": "expression",
+        "output": "={{ $('Webhook Trigger').item.json.approche === 'reference' ? 1 : $('Webhook Trigger').item.json.approche === 'combined' ? 2 : 0 }}"
+      }
+    },
+    {
+      "id": "node-upload-reference",
+      "name": "Upload — Référence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1060, 480],
+      "parameters": {
+        "jsCode": "const w = $('Webhook Trigger').first().json;\nconst sourceUrl = w.image_reference_url;\n\nif (!sourceUrl) {\n  return [{ json: { uploaded_reference_url: null } }];\n}\n\nconst timestamp = Date.now();\nconst clientId = w.client_id || 'unknown';\nconst urlLower = sourceUrl.toLowerCase();\nconst ext = urlLower.includes('.pdf') ? 'pdf' : urlLower.includes('.png') ? 'png' : 'jpg';\nconst filename = `references/${clientId}/${timestamp}.${ext}`;\nconst contentType = ext === 'pdf' ? 'application/pdf' : `image/${ext}`;\nconst serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2dWNkbHZieGxtdm5yenZ0Y2d2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDM5MTk4NSwiZXhwIjoyMDk1OTY3OTg1fQ.nHT6q1TkdLQzulnGDYr47shI50UjpdE0JsjvuPhgo7Y';\n\ntry {\n  // Télécharger le fichier source\n  const fileData = await $helpers.httpRequest({\n    method: 'GET',\n    url: sourceUrl\n  });\n\n  // Uploader vers Supabase Storage\n  await $helpers.httpRequest({\n    method: 'POST',\n    url: `https://kvucdlvbxlmvnrzvtcgv.supabase.co/storage/v1/object/ngondet-assets/${filename}`,\n    headers: {\n      'Authorization': `Bearer ${serviceKey}`,\n      'Content-Type': contentType\n    },\n    body: fileData\n  });\n\n  const publicUrl = `https://kvucdlvbxlmvnrzvtcgv.supabase.co/storage/v1/object/public/ngondet-assets/${filename}`;\n  return [{ json: { uploaded_reference_url: publicUrl } }];\n} catch(e) {\n  // Fallback : utiliser l'URL originale si l'upload échoue\n  return [{ json: { uploaded_reference_url: sourceUrl, upload_error: e.message } }];\n}"
+      }
+    },
+    {
+      "id": "node-upload-combined",
+      "name": "Upload — Combiné",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1060, 660],
+      "parameters": {
+        "jsCode": "const w = $('Webhook Trigger').first().json;\nconst serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt2dWNkbHZieGxtdm5yenZ0Y2d2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDM5MTk4NSwiZXhwIjoyMDk1OTY3OTg1fQ.nHT6q1TkdLQzulnGDYr47shI50UjpdE0JsjvuPhgo7Y';\nconst timestamp = Date.now();\nconst clientId = w.client_id || 'unknown';\n\nasync function uploadFile(sourceUrl, prefix) {\n  if (!sourceUrl) return null;\n  const urlLower = sourceUrl.toLowerCase();\n  const ext = urlLower.includes('.pdf') ? 'pdf' : urlLower.includes('.png') ? 'png' : 'jpg';\n  const filename = `${prefix}/${clientId}/${timestamp}.${ext}`;\n  const contentType = ext === 'pdf' ? 'application/pdf' : `image/${ext}`;\n  try {\n    const fileData = await $helpers.httpRequest({ method: 'GET', url: sourceUrl });\n    await $helpers.httpRequest({\n      method: 'POST',\n      url: `https://kvucdlvbxlmvnrzvtcgv.supabase.co/storage/v1/object/ngondet-assets/${filename}`,\n      headers: { 'Authorization': `Bearer ${serviceKey}`, 'Content-Type': contentType },\n      body: fileData\n    });\n    return `https://kvucdlvbxlmvnrzvtcgv.supabase.co/storage/v1/object/public/ngondet-assets/${filename}`;\n  } catch(e) {\n    return sourceUrl; // fallback\n  }\n}\n\nconst [refUrl, visuelUrl] = await Promise.all([\n  uploadFile(w.image_reference_url, 'references'),\n  uploadFile(w.visuel_import_url, 'visuels')\n]);\n\nreturn [{ json: { uploaded_reference_url: refUrl, uploaded_visuel_url: visuelUrl } }];"
+      }
+    },
+    {
+      "id": "node-supabase-templates",
+      "name": "Supabase — Templates Disponibles",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1060, 120],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://kvucdlvbxlmvnrzvtcgv.supabase.co/rest/v1/templates?type_visuel=eq.' + $('Webhook Trigger').item.json.type_visuel + '&select=id,nom,style,tags,orshot_template_id,source,format' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "sb_publishable_z-vrTzV72qPVPBtgWWgyBg_kcHmFzQA" },
+            { "name": "Authorization", "value": "Bearer sb_publishable_z-vrTzV72qPVPBtgWWgyBg_kcHmFzQA" }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "node-set-context",
+      "name": "Set — Contexte Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1260, 300],
+      "parameters": {
+        "jsCode": "const w = $('Webhook Trigger').first().json;\nconst c = $('Extraire Client Supabase').first().json;\nconst uploaded = $input.first().json;\n\nconst ctx = {\n  client_id: w.client_id,\n  mode_selection: w.mode_selection || 'ia',\n  approche: w.approche || 'template',\n  description_libre: w.description_libre || '',\n  type_visuel: w.type_visuel || '',\n  titre_principal: w.titre_principal || '',\n  sous_titre: w.sous_titre || '',\n  badge_offre: w.badge_offre || '',\n  format: w.format || 'portrait',\n  date_validite: w.date_validite || '',\n  contact_info: w.contact_info || '',\n  note_style: w.note_style || '',\n  image_reference_url: uploaded.uploaded_reference_url || w.image_reference_url || null,\n  visuel_import_url: uploaded.uploaded_visuel_url || w.visuel_import_url || null,\n  templates_disponibles: (() => { try { const t = $('Supabase — Templates Disponibles').first().json; const arr = Array.isArray(t) ? t : [t]; return arr.map(tpl => ({ id: tpl.orshot_template_id || tpl.id, nom: tpl.nom, style: tpl.style, tags: tpl.tags, source: tpl.source, format: tpl.format })); } catch(e) { return w.templates_disponibles || []; } })(),\n  logo_url: w.logo_url || c.logo_url || '',\n  couleur_principale: c.couleur_principale || '#1A1A2E',\n  couleur_secondaire: c.couleur_secondaire || '#534AB7',\n  couleur_fond: w.couleur_fond || c.couleur_principale || '#1A1A2E',\n  template_flyer_id: c.template_flyer_id || '',\n  template_story_id: c.template_story_id || '',\n  template_post_id: c.template_post_id || ''\n};\n\nconst prompt = `Tu es un expert en création de visuels marketing pour Ngondet Studio, basé au Gabon.\n\nTu reçois une demande client et tu dois extraire et enrichir les variables pour générer un visuel professionnel.\n\nRÈGLES STRICTES :\n- Retourner UNIQUEMENT un objet JSON valide\n- Pas de texte avant ni après\n- Pas de backticks markdown\n- Si une info manque, déduire depuis la description ou mettre null\n- Respecter la charte graphique du client\n- Optimiser les textes pour qu'ils soient percutants (max 60 chars pour titre)\n- Si mode_selection = 'ia' : choisir le meilleur template parmi templates_disponibles\n- Si mode_selection = 'manuel' : utiliser le template_id fourni\n\nDESCRIPTION LIBRE :\n${ctx.description_libre}\n\nFORMULAIRE :\n- type_visuel: ${ctx.type_visuel}\n- titre_principal: ${ctx.titre_principal}\n- sous_titre: ${ctx.sous_titre}\n- badge_offre: ${ctx.badge_offre}\n- format: ${ctx.format}\n- date_validite: ${ctx.date_validite}\n- contact_info: ${ctx.contact_info}\n- note_style: ${ctx.note_style}\n\nCHARTE CLIENT :\n- couleur_principale: ${ctx.couleur_principale}\n- couleur_secondaire: ${ctx.couleur_secondaire}\n- logo_url: ${ctx.logo_url}\n- couleur_fond_demandée: ${ctx.couleur_fond}\n\nIMAGE RÉFÉRENCE : ${ctx.image_reference_url || 'non fournie'}\nVISUEL À INTÉGRER : ${ctx.visuel_import_url || 'non fourni'}\nMODE TEMPLATE : ${ctx.mode_selection}\nTEMPLATES DISPONIBLES : ${JSON.stringify(ctx.templates_disponibles)}\n\nSCORING DES TEMPLATES :\nAnalyse CHAQUE template disponible et attribue-lui un score de 1 à 10 selon :\n- Adéquation avec le type_visuel demandé\n- Cohérence avec la description libre\n- Compatibilité avec la charte graphique (couleurs, style)\n- Alignement avec le note_style\n\nRetourne les 5 meilleurs dans templates_proposes (du plus au moins compatible).\n\nRETOURNE CE JSON ET RIEN D'AUTRE :\n{\n  \"template_id\": \"id du meilleur template\",\n  \"titre_principal\": \"texte optimisé max 60 chars\",\n  \"sous_titre\": \"texte ou null\",\n  \"badge_offre\": \"texte ou null\",\n  \"date_validite\": \"texte ou null\",\n  \"contact_info\": \"texte ou null\",\n  \"couleur_fond\": \"#hex\",\n  \"logo_url\": \"url\",\n  \"visuel_import_url\": \"url ou null\",\n  \"style_extrait\": \"description du style analysé ou null\",\n  \"templates_proposes\": [\n    { \"template_id\": \"id\", \"nom\": \"nom\", \"score\": 9, \"raison\": \"explication courte\" }\n  ]\n}`;\n\nreturn [{ json: { ...ctx, prompt } }];"
+      }
+    },
+    {
+      "id": "node-claude",
+      "name": "Claude Haiku — Extraction Variables",
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [1460, 300],
+      "credentials": {
+        "anthropicApi": {
+          "name": "Anthropic — Ngondet Studio"
+        }
+      },
+      "parameters": {
+        "model": "claude-haiku-4-5",
+        "temperature": 0.1,
+        "maxTokens": 1500,
+        "messages": {
+          "values": [
+            {
+              "role": "user",
+              "content": "={{ $json.prompt }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-formater",
+      "name": "Formater Réponse Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1660, 300],
+      "parameters": {
+        "jsCode": "const raw = $input.item.json.content?.[0]?.text || $input.item.json.text || '';\nconst clean = raw.replace(/```json|```/g, '').trim();\nlet parsed;\ntry {\n  parsed = JSON.parse(clean);\n} catch(e) {\n  throw new Error('Claude a retourné un JSON invalide : ' + raw);\n}\nconst ctx = $('Set — Contexte Claude').first().json;\nconst generation_id = 'gen_' + Date.now();\nreturn [{\n  json: {\n    templates_proposes: parsed.templates_proposes || [],\n    claude_data: {\n      ...parsed,\n      client_id: ctx.client_id,\n      type_visuel: ctx.type_visuel,\n      format: ctx.format,\n      mode_selection: ctx.mode_selection,\n      generation_id\n    }\n  }\n}];"
+      }
+    },
+    {
+      "id": "node-repondre",
+      "name": "Répondre au Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1860, 300],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, templates_proposes: $json.templates_proposes, resume_url: $execution.resumeUrl, generation_id: $json.claude_data.generation_id }) }}",
+        "options": { "responseCode": 200 }
+      }
+    },
+    {
+      "id": "node-wait",
+      "name": "Wait — Sélection Template",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [2060, 300],
+      "parameters": {
+        "resume": "webhook"
+      }
+    },
+    {
+      "id": "node-function",
+      "name": "Function — Parse JSON Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2260, 300],
+      "parameters": {
+        "jsCode": "const waitData = $input.first().json;\nconst claudeData = $('Formater Réponse Claude').first().json.claude_data;\nconst selectedTemplateId = waitData.template_id || waitData.body?.template_id || claudeData.template_id;\nreturn [{\n  json: {\n    ...claudeData,\n    template_id: selectedTemplateId\n  }\n}];"
+      }
+    },
+    {
+      "id": "node-orshot",
+      "name": "Orshot — Génération Visuel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2460, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.orshot.com/v1/studio/render",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Authorization", "value": "Bearer os-8ytzsez7hqqu8knr2md22lbsvr7kr1" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ templateId: $json.template_id, modifications: { background_color: $json.couleur_fond, logo: $json.logo_url, titre_principal: $json.titre_principal, sous_titre: $json.sous_titre || '', badge_offre: $json.badge_offre || '', contact_info: $json.contact_info || '', date_validite: $json.date_validite || '', visuel_import: $json.visuel_import_url || '' }, response: { type: 'url', format: 'png', scale: 1 } }) }}",
+        "options": { "timeout": 60000 }
+      }
+    },
+    {
+      "id": "node-output",
+      "name": "Output — Retour Application",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [2660, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            { "name": "success", "value": true, "type": "boolean" },
+            { "name": "generation_id", "value": "={{ $('Function — Parse JSON Claude').item.json.generation_id }}", "type": "string" },
+            { "name": "client_id", "value": "={{ $('Function — Parse JSON Claude').item.json.client_id }}", "type": "string" },
+            { "name": "template_id", "value": "={{ $('Function — Parse JSON Claude').item.json.template_id }}", "type": "string" },
+            { "name": "image_url", "value": "={{ $json.image_url || $json.url || $json.render_url }}", "type": "string" },
+            { "name": "generated_at", "value": "={{ new Date().toISOString() }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{ "node": "Supabase — Charte Client", "type": "main", "index": 0 }]]
+    },
+    "Supabase — Charte Client": {
+      "main": [[{ "node": "Extraire Client Supabase", "type": "main", "index": 0 }]]
+    },
+    "Extraire Client Supabase": {
+      "main": [[{ "node": "Switch — Approche", "type": "main", "index": 0 }]]
+    },
+    "Switch — Approche": {
+      "main": [
+        [{ "node": "Supabase — Templates Disponibles", "type": "main", "index": 0 }],
+        [{ "node": "Upload — Référence", "type": "main", "index": 0 }],
+        [{ "node": "Upload — Combiné", "type": "main", "index": 0 }]
+      ]
+    },
+    "Supabase — Templates Disponibles": {
+      "main": [[{ "node": "Set — Contexte Claude", "type": "main", "index": 0 }]]
+    },
+    "Upload — Référence": {
+      "main": [[{ "node": "Set — Contexte Claude", "type": "main", "index": 0 }]]
+    },
+    "Upload — Combiné": {
+      "main": [[{ "node": "Set — Contexte Claude", "type": "main", "index": 0 }]]
+    },
+    "Set — Contexte Claude": {
+      "main": [[{ "node": "Claude Haiku — Extraction Variables", "type": "main", "index": 0 }]]
+    },
+    "Claude Haiku — Extraction Variables": {
+      "main": [[{ "node": "Formater Réponse Claude", "type": "main", "index": 0 }]]
+    },
+    "Formater Réponse Claude": {
+      "main": [[{ "node": "Répondre au Webhook", "type": "main", "index": 0 }]]
+    },
+    "Répondre au Webhook": {
+      "main": [[{ "node": "Wait — Sélection Template", "type": "main", "index": 0 }]]
+    },
+    "Wait — Sélection Template": {
+      "main": [[{ "node": "Function — Parse JSON Claude", "type": "main", "index": 0 }]]
+    },
+    "Function — Parse JSON Claude": {
+      "main": [[{ "node": "Orshot — Génération Visuel", "type": "main", "index": 0 }]]
+    },
+    "Orshot — Génération Visuel": {
+      "main": [[{ "node": "Output — Retour Application", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "pinData": {
+    "Webhook Trigger": [
+      {
+        "json": {
+          "client_id": "a0000001-0000-0000-0000-000000000001",
+          "approche": "template",
+          "mode_selection": "ia",
+          "description_libre": "Fais-moi un flyer pour une promo de -30% ce vendredi sur toute la collection",
+          "type_visuel": "flyer",
+          "titre_principal": "",
+          "sous_titre": "",
+          "badge_offre": "-30%",
+          "format": "portrait",
+          "date_validite": "Ce vendredi",
+          "contact_info": "+241 06 00 00 00",
+          "couleur_fond": "",
+          "note_style": "festif et accrocheur",
+          "image_reference_url": null,
+          "visuel_import_url": null,
+          "templates_disponibles": [
+            { "id": "12022", "nom": "Flyer Promo Standard", "type": "flyer", "source": "orshot" }
+          ]
+        }
+      }
+    ]
+  }
+}

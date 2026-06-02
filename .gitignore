@@ -1,4 +1,7 @@
 cred_*.json
 .claude/
 *.env
+.env
 FICHE_TECHNIQUE_PRIVEE.md
+node_modules/
+ngondet-studio/.env
