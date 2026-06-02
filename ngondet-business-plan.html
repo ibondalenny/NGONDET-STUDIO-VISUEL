@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ngondet Studio — Business Plan 400K</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--night:#060a16;--deep:#0a0f22;--navy:#0e1638;
+--card:rgba(14,22,56,0.5);--card2:rgba(14,22,56,0.75);
+--neon:#39ff14;--neon2:#2ecc40;--neonG:rgba(57,255,20,0.12);--neonG2:rgba(57,255,20,0.05);
+--white:#fff;--off:#dfe4f0;--muted:#6d77a0;
+--bdr:rgba(57,255,20,0.1);--bdr2:rgba(255,255,255,0.06);
+--blue:#5b8cff;--red:#ff4b5e;--amber:#ffb020;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--night);color:var(--off);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden}
+h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif}
+
+/* ═══ CANVAS ═══ */
+canvas#sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+.moon{position:fixed;top:50px;right:6vw;width:100px;height:100px;border-radius:50%;z-index:1;pointer-events:none;
+background:radial-gradient(circle at 32% 32%,#f8f2d8,#e4cfa0 55%,#c4a868);
+box-shadow:0 0 80px rgba(228,207,160,.25),0 0 160px rgba(228,207,160,.08);
+animation:moonFloat 24s ease-in-out infinite}
+.moon i{position:absolute;border-radius:50%;background:rgba(0,0,0,.06)}
+.moon i:nth-child(1){width:20px;height:20px;top:22px;left:28px}
+.moon i:nth-child(2){width:12px;height:12px;top:50px;left:55px}
+.moon i:nth-child(3){width:16px;height:16px;top:60px;left:22px}
+@keyframes moonFloat{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-12px,14px) rotate(2deg)}}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;
+padding:.9rem 3.5rem;background:rgba(6,10,22,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr2)}
+.logo{display:flex;align-items:center;gap:.65rem}
+.logo-moon{font-size:1.4rem}
+.logo-txt{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--white)}
+.logo-txt b{color:var(--neon)}
+.logo-badge{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;margin-left:1rem;padding-left:1rem;border-left:1px solid var(--bdr)}
+.nav-l{display:flex;gap:1.8rem}
+.nav-l a{color:var(--muted);text-decoration:none;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:.2s}
+.nav-l a:hover{color:var(--neon)}
+
+/* ═══ HERO ═══ */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10rem 2rem 6rem;position:relative;z-index:2}
+.hero-glow{position:absolute;width:900px;height:900px;background:radial-gradient(circle,rgba(57,255,20,.05) 0%,transparent 60%);top:50%;left:50%;transform:translate(-50%,-50%);animation:gp 8s ease-in-out infinite;pointer-events:none}
+@keyframes gp{0%,100%{opacity:1;transform:translate(-50%,-50%) scale(1)}50%{opacity:.4;transform:translate(-50%,-50%) scale(1.2)}}
+.hero-pill{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem 1.2rem;border-radius:100px;border:1px solid var(--bdr);background:var(--neonG2);
+font-size:.68rem;color:var(--neon);font-weight:600;text-transform:uppercase;letter-spacing:.15em;margin-bottom:2.2rem;animation:fu .7s ease both}
+.hero h1{font-size:clamp(3.2rem,8.5vw,7rem);font-weight:700;line-height:.92;color:var(--white);margin-bottom:1.2rem;animation:fu .7s .08s ease both}
+.hero h1 em{color:var(--neon);font-style:normal;text-shadow:0 0 40px rgba(57,255,20,.35)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,2.2vw,1.35rem);color:var(--muted);max-width:580px;margin-bottom:3.5rem;animation:fu .7s .15s ease both}
+.hero-nums{display:flex;gap:4rem;flex-wrap:wrap;justify-content:center;animation:fu .7s .22s ease both}
+.hn{text-align:center}.hn-v{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--neon);line-height:1}
+.hn-l{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-top:.35rem}
+@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ SECTIONS ═══ */
+.sec{padding:5.5rem 3.5rem;max-width:1320px;margin:0 auto;position:relative;z-index:2}
+.tag{display:inline-block;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--neon);border:1px solid var(--bdr);padding:.25rem .9rem;border-radius:100px;margin-bottom:1rem}
+.sh{font-size:clamp(1.9rem,3.8vw,3rem);font-weight:700;color:var(--white);line-height:1.1;margin-bottom:.7rem}
+.sp{color:var(--muted);max-width:520px;font-size:.9rem;margin-bottom:2.8rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--bdr),transparent);margin:0 3.5rem;position:relative;z-index:2}
+
+/* ═══ CARDS ═══ */
+.card{background:var(--card);border:1px solid var(--bdr2);border-radius:18px;padding:1.8rem;transition:.3s;backdrop-filter:blur(8px)}
+.card:hover{border-color:var(--bdr);transform:translateY(-3px);background:var(--card2)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.2rem}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem}
+.ci{font-size:1.8rem;margin-bottom:.8rem}.ch{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--white);margin-bottom:.4rem}
+.cp{color:var(--muted);font-size:.85rem;line-height:1.7}
+
+/* ═══ NEON BOX ═══ */
+.nbox{border:1px solid var(--bdr);border-radius:22px;padding:2.5rem;background:linear-gradient(135deg,var(--neonG2),rgba(14,22,56,.3));position:relative;overflow:hidden}
+.nbox::before{content:'';position:absolute;top:-1px;left:18%;right:18%;height:1px;background:linear-gradient(90deg,transparent,var(--neon),transparent)}
+
+/* ═══ PRICING ═══ */
+.pc{background:var(--card);border:1px solid var(--bdr2);border-radius:18px;padding:1.8rem;transition:.3s;position:relative}
+.pc:hover{border-color:var(--bdr);transform:translateY(-3px)}
+.pc.ft{border-color:var(--neon);background:linear-gradient(135deg,rgba(57,255,20,.06),rgba(14,22,56,.5))}
+.pc.ft::before{content:'';position:absolute;top:-1px;left:25%;right:25%;height:2px;background:linear-gradient(90deg,transparent,var(--neon),transparent)}
+.pc-pop{position:absolute;top:-11px;right:1.1rem;background:var(--neon);color:var(--night);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.25rem .7rem;border-radius:100px}
+.pc-l{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;font-weight:600}
+.pc-p{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:700;color:var(--white);line-height:1}
+.pc-p span{font-size:.85rem;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400}
+.pc-s{font-size:.8rem;color:var(--neon);margin:.5rem 0 .9rem;font-weight:600}
+.pc-ul{list-style:none}.pc-ul li{font-size:.83rem;color:var(--off);padding:.3rem 0;border-bottom:1px solid var(--bdr2);display:flex;align-items:flex-start;gap:.45rem}
+.pc-ul li:last-child{border-bottom:none}.pc-ul li::before{content:'◈';color:var(--neon);flex-shrink:0;font-size:.65rem;margin-top:.18rem}
+
+/* ═══ TABLE ═══ */
+.tb{width:100%;border-collapse:collapse}
+.tb th{font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:.65rem .9rem;text-align:left;border-bottom:1px solid var(--bdr2)}
+.tb td{padding:.7rem .9rem;font-size:.85rem;border-bottom:1px solid var(--bdr2)}
+.tb tr:last-child td{border-bottom:none}.tb tr:hover td{background:rgba(57,255,20,.02)}
+.pill{display:inline-block;padding:.12rem .5rem;border-radius:4px;font-size:.7rem;font-weight:600}
+.pill-g{background:rgba(57,255,20,.1);color:var(--neon)}.pill-r{background:rgba(255,75,94,.1);color:var(--red)}
+.pill-b{background:rgba(91,140,255,.12);color:var(--blue)}.pill-w{background:rgba(255,255,255,.07);color:var(--white)}
+.pill-a{background:rgba(255,176,32,.1);color:var(--amber)}
+
+/* ═══ PROJECTIONS ═══ */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:.9rem;margin-bottom:2rem}
+.pcard{border-radius:14px;padding:1.2rem;text-align:center;border:1px solid var(--bdr2);background:var(--card);transition:.25s}
+.pcard:hover{transform:translateY(-2px);border-color:var(--bdr)}
+.pm{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.3rem}
+.pv{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;line-height:1}
+.pd{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+
+/* ═══ BAR CHART ═══ */
+.bars{display:flex;align-items:flex-end;gap:.6rem;height:220px;padding:1rem 0;margin:1.5rem 0}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.bar-val{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-weight:700;color:var(--neon)}
+.bar-fill{width:100%;border-radius:8px 8px 4px 4px;min-height:4px;transition:height 1.2s cubic-bezier(.4,0,.2,1);position:relative}
+.bar-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem}
+
+/* ═══ PROGRESS ═══ */
+.prg{margin-bottom:1.1rem}
+.prg-h{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.35rem}
+.prg-h span:last-child{color:var(--neon);font-weight:600}
+.prg-t{height:5px;background:rgba(255,255,255,.04);border-radius:100px;overflow:hidden}
+.prg-f{height:100%;border-radius:100px;width:0;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+
+/* ═══ TIMELINE ═══ */
+.tl{position:relative;padding-left:2rem}
+.tl::before{content:'';position:absolute;left:5px;top:8px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--neon),var(--blue),transparent)}
+.tli{position:relative;margin-bottom:1.8rem}
+.tli::before{content:'';position:absolute;left:-1.75rem;top:5px;width:9px;height:9px;border-radius:50%;background:var(--night);border:2px solid var(--neon);transition:.2s}
+.tli:hover::before{background:var(--neon)}
+.tl-w{font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--neon);font-weight:600;margin-bottom:.25rem}
+.tl-t{font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--white);font-size:1rem;margin-bottom:.35rem}
+.tl-ul{list-style:none}.tl-ul li{font-size:.8rem;color:var(--muted);padding:.15rem 0;display:flex;gap:.4rem}.tl-ul li::before{content:'→';color:var(--neon);flex-shrink:0}
+
+/* ═══ FLOW ═══ */
+.fbox{background:var(--card);border:1px solid var(--bdr2);border-radius:14px;padding:1.5rem;margin-bottom:1.2rem}
+.fl{font-size:.67rem;text-transform:uppercase;letter-spacing:.15em;color:var(--neon);margin-bottom:.8rem;font-weight:600}
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem}
+.fn{padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:500;white-space:nowrap}
+.fn-a{background:rgba(57,255,20,.08);color:var(--neon);border:1px solid var(--bdr)}
+.fn-b{background:rgba(91,140,255,.1);color:var(--blue);border:1px solid rgba(91,140,255,.15)}
+.fn-c{background:rgba(255,255,255,.05);color:var(--white);border:1px solid var(--bdr2)}
+.fa{color:var(--muted);font-size:.9rem}
+
+/* ═══ TOOL ═══ */
+.tr{display:flex;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--bdr2);gap:.9rem}
+.tr:last-child{border-bottom:none}.tr-e{font-size:1.3rem;width:36px;text-align:center;flex-shrink:0}
+.tr-i{flex:1}.tr-n{font-weight:600;color:var(--white);font-size:.87rem}.tr-d{font-size:.75rem;color:var(--muted)}
+.tr-c{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.95rem;color:var(--neon);white-space:nowrap}
+
+/* ═══ SWOT ═══ */
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:1px;border-radius:18px;overflow:hidden;border:1px solid var(--bdr2)}
+.sw{padding:1.8rem;background:var(--card)}.sw:hover{background:var(--card2)}
+.sw-l{font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;font-weight:600;margin-bottom:.8rem}
+.sw-s .sw-l{color:var(--neon)}.sw-w .sw-l{color:var(--red)}.sw-o .sw-l{color:var(--blue)}.sw-t .sw-l{color:var(--amber)}
+.sw ul{list-style:none}.sw li{font-size:.82rem;color:var(--muted);padding:.25rem 0;display:flex;gap:.4rem}
+
+/* ═══ REVEAL ═══ */
+.rv{opacity:0;transform:translateY(25px);transition:.7s ease}.rv.vis{opacity:1;transform:translateY(0)}
+
+/* ═══ FOOTER ═══ */
+footer{text-align:center;padding:4rem 2rem;border-top:1px solid var(--bdr2);position:relative;z-index:2}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+nav{padding:.8rem 1.2rem}.nav-l,.logo-badge{display:none}
+.sec{padding:3.5rem 1.2rem}.divider{margin:0 1.2rem}
+.hero{padding:7rem 1.2rem 3.5rem}.hero-nums{gap:1.8rem}
+.moon{width:55px;height:55px;top:18px;right:15px}
+.swot{grid-template-columns:1fr}
+.bars{height:160px}
+}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--night)}::-webkit-scrollbar-thumb{background:rgba(57,255,20,.12);border-radius:3px}
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+<div class="moon"><i></i><i></i><i></i></div>
+
+<!-- NAV -->
+<nav>
+<div class="logo"><span class="logo-moon">🌙</span><span class="logo-txt">Ngondet <b>Studio</b></span><span class="logo-badge">Business Plan · 400K FCFA · 2026</span></div>
+<div class="nav-l"><a href="#exec">Résumé</a><a href="#market">Marché</a><a href="#model">Modèle</a><a href="#proj">Projections</a><a href="#ops">Stack</a><a href="#road">Roadmap</a></div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<div class="hero">
+<div class="hero-glow"></div>
+<div class="hero-pill">📄 Business Plan Complet · Budget 400K FCFA</div>
+<h1>Ngondet<br><em>Studio</em></h1>
+<div class="hero-sub">Automatisation IA pour PME africaines — Agents WhatsApp & Visuels Marketing générés par intelligence artificielle</div>
+<div class="hero-nums">
+<div class="hn"><div class="hn-v">400K</div><div class="hn-l">Budget FCFA</div></div>
+<div class="hn"><div class="hn-v">100</div><div class="hn-l">Clients M8</div></div>
+<div class="hn"><div class="hn-v">19,6M</div><div class="hn-l">Cumulé 8 mois</div></div>
+<div class="hn"><div class="hn-v">92%</div><div class="hn-l">Autonomie</div></div>
+</div>
+</div>
+
+<!-- ═══════ 01 · RÉSUMÉ EXÉCUTIF ═══════ -->
+<div class="divider"></div>
+<section class="sec" id="exec">
+<div class="rv">
+<div class="tag">01 · Résumé exécutif</div>
+<h2 class="sh">La lune éclaire<br>ceux qui avancent.</h2>
+<p class="sp">"Ngondet" — la lune en myènè, langue gabonaise. Un micro-studio d'automatisation IA qui déploie deux services complémentaires pour les PME africaines et internationales.</p>
+</div>
+<div class="nbox rv" style="margin-bottom:2rem">
+<div class="g3">
+<div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--neon);margin-bottom:.4rem;font-weight:600">Mission</div><div class="serif" style="font-size:1.05rem;color:var(--white);font-weight:600">Rendre l'IA accessible et opérationnelle pour chaque PME africaine — sans compétence technique requise.</div></div>
+<div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--neon);margin-bottom:.4rem;font-weight:600">Vision</div><div class="serif" style="font-size:1.05rem;color:var(--white);font-weight:600">Devenir la référence IA pour les PME francophones d'ici 2028 — du Gabon à l'international.</div></div>
+<div><div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--neon);margin-bottom:.4rem;font-weight:600">Proposition unique</div><div class="serif" style="font-size:1.05rem;color:var(--white);font-weight:600">Une armée d'IA spécialisées + un regard humain expert. Pas juste ChatGPT — un écosystème qui livre des résultats pro.</div></div>
+</div>
+</div>
+<div class="g2 rv">
+<div class="card"><div class="ci">🤖</div><div class="ch">Service 1 — Agent IA WhatsApp</div><div class="cp">Agents conversationnels 24h/24 sur WhatsApp Business pour PME. SAV, commandes, réservations — zéro intervention humaine. Trois plans : Starter, Business, Scale.</div></div>
+<div class="card"><div class="ci">🎨</div><div class="ch">Service 2 — Visuels Marketing IA</div><div class="cp">Visuels pro (flyers, stories, posts) livrés via WhatsApp en moins de 2 minutes. Le client décrit, l'IA génère. 40 visuels/mois, brandés à sa charte graphique.</div></div>
+</div>
+</section>
+
+<!-- ═══════ 02 · FONDATEUR ═══════ -->
+<div class="divider"></div>
+<section class="sec">
+<div class="rv">
+<div class="tag">02 · Le fondateur</div>
+<h2 class="sh">Qui est derrière<br>la lune ?</h2>
+</div>
+<div class="card rv" style="max-width:720px">
+<div style="display:flex;gap:1.8rem;align-items:flex-start;flex-wrap:wrap">
+<div style="width:75px;height:75px;border-radius:50%;background:linear-gradient(135deg,var(--neon),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0">👤</div>
+<div style="flex:1;min-width:240px">
+<div class="ch" style="font-size:1.2rem">Entrepreneur gabonais · 24 ans</div>
+<div class="cp" style="margin-bottom:.9rem">Master Management & Développement Commercial. Vibecodeur et nocodeur passionné d'IA. Co-fondateur de Duduma Agency (sites, agents IA, SaaS). Ngondet Studio est un projet personnel, indépendant de Duduma.</div>
+<div style="display:flex;flex-wrap:wrap;gap:.4rem">
+<span style="padding:.2rem .65rem;border-radius:5px;font-size:.72rem;background:var(--neonG2);color:var(--neon);border:1px solid var(--bdr)">Vibe Coding</span>
+<span style="padding:.2rem .65rem;border-radius:5px;font-size:.72rem;background:var(--neonG2);color:var(--neon);border:1px solid var(--bdr)">No-Code</span>
+<span style="padding:.2rem .65rem;border-radius:5px;font-size:.72rem;background:var(--neonG2);color:var(--neon);border:1px solid var(--bdr)">Automatisation IA</span>
+<span style="padding:.2rem .65rem;border-radius:5px;font-size:.72rem;background:var(--neonG2);color:var(--neon);border:1px solid var(--bdr)">Business Dev</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════ 03 · MARCHÉ ═══════ -->
+<div class="divider"></div>
+<section class="sec" id="market">
+<div class="rv">
+<div class="tag">03 · Analyse de marché</div>
+<h2 class="sh">Le terrain de jeu.</h2>
+<p class="sp">L'Afrique francophone est le marché le plus sous-servi au monde en automatisation IA pour PME.</p>
+</div>
+<div class="g3 rv" style="margin-bottom:1.8rem">
+<div class="card"><div class="ci">🌍</div><div class="ch">Marché primaire</div><div class="cp">PME d'Afrique francophone : Gabon, Côte d'Ivoire, Sénégal, Cameroun. +40M de PME, moins de 1% utilisent l'IA.</div></div>
+<div class="card"><div class="ci">🇫🇷</div><div class="ch">Marché secondaire</div><div class="cp">Diaspora africaine (France, Belgique, Canada) et PME francophones internationales. Fort pouvoir d'achat, familiarité WhatsApp.</div></div>
+<div class="card"><div class="ci">📱</div><div class="ch">Avantage WhatsApp</div><div class="cp">App n°1 en Afrique subsaharienne. Canal commercial par défaut — pas besoin d'éduquer le marché sur l'outil.</div></div>
+</div>
+
+<!-- SWOT -->
+<div class="rv">
+<div class="ch" style="margin-bottom:1.2rem;font-size:1.1rem">📊 Analyse SWOT</div>
+<div class="swot">
+<div class="sw sw-s"><div class="sw-l">Forces</div><ul><li><span style="color:var(--neon)">+</span> Stack 100% automatisé, coûts marginaux très bas</li><li><span style="color:var(--neon)">+</span> Canal WhatsApp natif au marché africain</li><li><span style="color:var(--neon)">+</span> Positionnement unique Humain + IA</li><li><span style="color:var(--neon)">+</span> Gestion 100% mobile, 3-4h/semaine</li><li><span style="color:var(--neon)">+</span> Entreprise formalisée (ANPI)</li></ul></div>
+<div class="sw sw-w"><div class="sw-l">Faiblesses</div><ul><li><span style="color:var(--red)">−</span> Fondateur unique, capacité limitée</li><li><span style="color:var(--red)">−</span> Dépendance aux API tierces (OpenAI, Meta)</li><li><span style="color:var(--red)">−</span> Pas d'historique client encore</li><li><span style="color:var(--red)">−</span> Voiceflow limité sur mobile pour le build</li></ul></div>
+<div class="sw sw-o"><div class="sw-l">Opportunités</div><ul><li><span style="color:var(--blue)">↗</span> Marché IA africain quasi vierge</li><li><span style="color:var(--blue)">↗</span> Adoption massive de WhatsApp Business</li><li><span style="color:var(--blue)">↗</span> Diaspora francophone avec pouvoir d'achat</li><li><span style="color:var(--blue)">↗</span> Synergies avec Duduma Agency (réseau)</li></ul></div>
+<div class="sw sw-t"><div class="sw-l">Menaces</div><ul><li><span style="color:var(--amber)">⚠</span> Hausse des prix API OpenAI / Meta</li><li><span style="color:var(--amber)">⚠</span> Concurrents internationaux (Manychat, etc.)</li><li><span style="color:var(--amber)">⚠</span> Instabilité réseau / Mobile Money</li><li><span style="color:var(--amber)">⚠</span> Méfiance IA dans certains marchés</li></ul></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════ 04 · MODÈLE ÉCONOMIQUE ═══════ -->
+<div class="divider"></div>
+<section class="sec" id="model">
+<div class="rv">
+<div class="tag">04 · Modèle économique</div>
+<h2 class="sh">Ce qu'on vend.<br>Ce qu'on garde.</h2>
+<p class="sp">Setup one-shot + récurrence mensuelle + volume visuels. Le 1er mois d'abonnement agent est offert — le setup couvre les coûts.</p>
+</div>
+
+<!-- AGENTS -->
+<div class="rv" style="margin-bottom:1.5rem">
+<div class="ch" style="font-size:1rem;color:var(--neon);margin-bottom:1.3rem">🤖 Grille tarifaire — Agent IA WhatsApp</div>
+<div class="g3">
+<div class="pc">
+<div class="pc-l">Starter</div>
+<div class="pc-p">90K <span>FCFA/mois</span></div>
+<div class="pc-s">Setup : 100 000 FCFA · 1er mois offert</div>
+<ul class="pc-ul"><li>20 conversations/jour max</li><li>Agent configuré par secteur</li><li>WhatsApp Business intégré</li><li>Widget web inclus</li><li>Rapport mensuel auto</li><li>Au-delà : 150 FCFA/conv</li></ul>
+</div>
+<div class="pc ft">
+<div class="pc-pop">Populaire</div>
+<div class="pc-l">Business</div>
+<div class="pc-p">180K <span>FCFA/mois</span></div>
+<div class="pc-s">Setup : 150 000 FCFA · 1er mois offert</div>
+<ul class="pc-ul"><li>50 conversations/jour max</li><li>Tout le plan Starter</li><li>Intégrations avancées (CRM, catalogue)</li><li>Scénarios multi-étapes</li><li>Analytics détaillés</li><li>Au-delà : 120 FCFA/conv</li></ul>
+</div>
+<div class="pc">
+<div class="pc-l">Scale</div>
+<div class="pc-p">300K <span>FCFA/mois</span></div>
+<div class="pc-s">Setup : 450 000 FCFA · 1er mois offert</div>
+<ul class="pc-ul"><li>+50 conversations/jour</li><li>Tout le plan Business</li><li>Plafond personnalisé sur devis</li><li>Optimisation continue</li><li>Support prioritaire</li><li>Tarif volume négocié</li></ul>
+</div>
+</div>
+</div>
+
+<!-- VISUELS -->
+<div class="rv" style="margin-bottom:1.8rem">
+<div class="ch" style="font-size:1rem;color:var(--neon);margin-bottom:1.3rem">🎨 Grille tarifaire — Visuels Marketing IA</div>
+<div class="g2">
+<div class="pc ft">
+<div class="pc-l">Abonnement mensuel</div>
+<div class="pc-p">10K <span>FCFA/mois</span></div>
+<div class="pc-s">Pas de setup · Pas de mois gratuit · Immédiat</div>
+<ul class="pc-ul"><li>40 visuels/mois inclus</li><li>Flyers, stories, posts, bannières</li><li>Visuels brandés (logo + charte)</li><li>Livraison WhatsApp < 2 minutes</li><li>Retouches dans le quota</li></ul>
+</div>
+<div class="card" style="display:flex;flex-direction:column;justify-content:center">
+<div class="ci">💎</div>
+<div class="ch">Argument commercial clé</div>
+<div class="cp" style="margin-bottom:1.2rem">Un graphiste freelance facture 5 000 à 15 000 FCFA par visuel. 40 visuels = 200K à 600K FCFA. Ngondet livre les 40 pour 10 000 FCFA — <strong style="color:var(--neon)">95% d'économie</strong>.</div>
+<div style="padding:.9rem;background:var(--neonG2);border-radius:10px;border:1px solid var(--bdr)">
+<div class="serif" style="font-size:.95rem;color:var(--neon);font-weight:700;font-style:italic">"40 visuels pro pour le prix d'un café par jour."</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- MARGES -->
+<div class="card rv">
+<div class="ch" style="margin-bottom:1rem">📊 Marges nettes par service</div>
+<div style="overflow-x:auto"><table class="tb">
+<thead><tr><th>Service</th><th>Encaissé</th><th>Coût réel</th><th>Marge</th><th>Taux</th></tr></thead>
+<tbody>
+<tr><td>Setup Starter</td><td>100 000</td><td>~5 000</td><td style="color:var(--neon);font-weight:700">+95 000</td><td><span class="pill pill-g">95%</span></td></tr>
+<tr><td>Setup Business</td><td>150 000</td><td>~5 000</td><td style="color:var(--neon);font-weight:700">+145 000</td><td><span class="pill pill-g">97%</span></td></tr>
+<tr><td>Setup Scale</td><td>450 000</td><td>~5 000</td><td style="color:var(--neon);font-weight:700">+445 000</td><td><span class="pill pill-g">99%</span></td></tr>
+<tr><td>Mois gratuit Starter</td><td>0</td><td>~40 000</td><td style="color:var(--red)">-40 000</td><td><span class="pill pill-r">absorbé</span></td></tr>
+<tr><td>Mois gratuit Business</td><td>0</td><td>~99 000</td><td style="color:var(--red)">-99 000</td><td><span class="pill pill-r">absorbé</span></td></tr>
+<tr><td>Mois gratuit Scale</td><td>0</td><td>~150 000</td><td style="color:var(--red)">-150 000</td><td><span class="pill pill-r">absorbé</span></td></tr>
+<tr><td>Starter récurrent</td><td>90 000/mois</td><td>~40 000</td><td style="color:var(--neon);font-weight:700">+50 000</td><td><span class="pill pill-g">56%</span></td></tr>
+<tr><td>Business récurrent</td><td>180 000/mois</td><td>~99 000</td><td style="color:var(--neon);font-weight:700">+81 000</td><td><span class="pill pill-g">45%</span></td></tr>
+<tr><td>Scale récurrent</td><td>300 000/mois</td><td>~150 000</td><td style="color:var(--neon);font-weight:700">+150 000</td><td><span class="pill pill-g">50%</span></td></tr>
+<tr><td>Visuels /mois</td><td>10 000/mois</td><td>~0</td><td style="color:var(--neon);font-weight:700">+10 000</td><td><span class="pill pill-g">~100%</span></td></tr>
+</tbody></table></div>
+<div style="margin-top:.9rem;padding:.9rem;background:var(--neonG2);border-radius:8px;border:1px solid var(--bdr);font-size:.8rem;color:var(--muted)">
+💡 <strong style="color:var(--neon)">Le mois gratuit est viable</strong> — Setup Starter 100K − 40K = +60K net · Business 150K − 99K = +51K · Scale 450K − 150K = +300K.
+</div>
+</div>
+</section>
+
+<!-- ═══════ 05 · BUDGET 400K ═══════ -->
+<div class="divider"></div>
+<section class="sec">
+<div class="rv">
+<div class="tag">05 · Allocation du budget</div>
+<h2 class="sh">400 000 FCFA.<br>Chaque franc placé.</h2>
+<p class="sp">Budget structuré en 4 blocs : stack technique, formalisation légale, marketing d'acquisition et trésorerie de sécurité.</p>
+</div>
+
+<div class="g2 rv" style="margin-bottom:1.5rem">
+<div class="card">
+<div class="ch" style="margin-bottom:1rem">💰 Répartition du budget</div>
+<div style="overflow-x:auto"><table class="tb">
+<thead><tr><th>Poste</th><th>Montant</th><th>%</th></tr></thead>
+<tbody>
+<tr><td>🔧 Stack technique M1</td><td style="font-weight:600">67 200 FCFA</td><td><span class="pill pill-g">16,8%</span></td></tr>
+<tr><td>🏛️ Formalisation ANPI</td><td style="font-weight:600">100 000 FCFA</td><td><span class="pill pill-b">25%</span></td></tr>
+<tr><td>🎭 David (avatar IA) dès M1</td><td style="font-weight:600">14 000 FCFA</td><td><span class="pill pill-w">3,5%</span></td></tr>
+<tr><td>📢 Marketing payant M1</td><td style="font-weight:600">120 000 FCFA</td><td><span class="pill pill-a">30%</span></td></tr>
+<tr><td>🛡️ Trésorerie de sécurité</td><td style="font-weight:600">98 800 FCFA</td><td><span class="pill pill-b">24,7%</span></td></tr>
+<tr style="background:var(--neonG2)"><td class="serif" style="font-weight:700;font-size:1rem">TOTAL</td><td class="serif" style="font-weight:700;font-size:1rem;color:var(--neon)">400 000 FCFA</td><td></td></tr>
+</tbody></table></div>
+</div>
+
+<div class="card">
+<div class="ch" style="margin-bottom:1rem">🔧 Détail stack technique — 67 200 FCFA</div>
+<div class="tr"><div class="tr-e">🔄</div><div class="tr-i"><div class="tr-n">VPS Hostinger + n8n</div><div class="tr-d">Orchestration workflows illimités</div></div><div class="tr-c">7 200</div></div>
+<div class="tr"><div class="tr-e">🤖</div><div class="tr-i"><div class="tr-n">Voiceflow Pro</div><div class="tr-d">Construction agents conversationnels</div></div><div class="tr-c">24 000</div></div>
+<div class="tr"><div class="tr-e">🎨</div><div class="tr-i"><div class="tr-n">Bannerbear Launch</div><div class="tr-d">Génération visuels via API</div></div><div class="tr-c">30 000</div></div>
+<div class="tr"><div class="tr-e">🧠</div><div class="tr-i"><div class="tr-n">OpenAI crédit initial</div><div class="tr-d">GPT-4o — cerveau des agents</div></div><div class="tr-c">6 000</div></div>
+<div style="margin-top:.8rem;padding:.8rem;background:rgba(91,140,255,.06);border-radius:8px;border:1px solid rgba(91,140,255,.12);font-size:.78rem;color:var(--muted)">
+🏛️ <strong style="color:var(--blue)">ANPI</strong> — Formalisation de l'entreprise au Gabon. Donne un cadre légal, facilite la crédibilité auprès des clients et autorise la facturation professionnelle.
+</div>
+</div>
+</div>
+
+<!-- MARKETING DETAIL -->
+<div class="card rv">
+<div class="ch" style="margin-bottom:1rem">📢 Budget marketing M1 — 120 000 FCFA</div>
+<div class="g3">
+<div style="padding:1.2rem;border-radius:12px;border:1px solid var(--bdr2);background:rgba(255,255,255,.02)">
+<div style="font-size:1.5rem;margin-bottom:.5rem">📘</div>
+<div style="font-weight:600;color:var(--white);font-size:.9rem;margin-bottom:.3rem">Facebook / Instagram Ads</div>
+<div class="serif" style="font-size:1.5rem;font-weight:700;color:var(--neon)">70 000</div>
+<div style="font-size:.78rem;color:var(--muted);margin-top:.4rem">Ciblage PME Gabon + CI + Sénégal. CPM Afrique ~500-1500 FCFA → 50K à 140K impressions → 8 à 15 leads.</div>
+</div>
+<div style="padding:1.2rem;border-radius:12px;border:1px solid var(--bdr2);background:rgba(255,255,255,.02)">
+<div style="font-size:1.5rem;margin-bottom:.5rem">🎵</div>
+<div style="font-weight:600;color:var(--white);font-size:.9rem;margin-bottom:.3rem">TikTok Boost</div>
+<div class="serif" style="font-size:1.5rem;font-weight:700;color:var(--blue)">30 000</div>
+<div style="font-size:.78rem;color:var(--muted);margin-top:.4rem">3-4 vidéos David boostées. Format avant/après, démonstrations live. Viralité organique amplifiée.</div>
+</div>
+<div style="padding:1.2rem;border-radius:12px;border:1px solid var(--bdr2);background:rgba(255,255,255,.02)">
+<div style="font-size:1.5rem;margin-bottom:.5rem">💬</div>
+<div style="font-weight:600;color:var(--white);font-size:.9rem;margin-bottom:.3rem">WhatsApp Broadcast</div>
+<div class="serif" style="font-size:1.5rem;font-weight:700;color:var(--amber)">20 000</div>
+<div style="font-size:.78rem;color:var(--muted);margin-top:.4rem">Numéro Business dédié + campagne directe groupes entrepreneurs gabonais / ivoiriens.</div>
+</div>
+</div>
+<div style="margin-top:1rem;padding:.9rem;background:var(--neonG2);border-radius:8px;border:1px solid var(--bdr);font-size:.8rem;color:var(--muted)">
+📈 <strong style="color:var(--neon)">Marketing récurrent :</strong> M2-M3 → 80K/mois · M4+ → 60K/mois (organique + David prennent le relai).
+</div>
+</div>
+</section>
+
+<!-- ═══════ 06 · PROJECTIONS ═══════ -->
+<div class="divider"></div>
+<section class="sec" id="proj">
+<div class="rv">
+<div class="tag">06 · Projections financières</div>
+<h2 class="sh">Les chiffres.<br>Mois par mois.</h2>
+<p class="sp">Hypothèses : M1 (4S+1B+10V) · M2-3 (+3S+1B+1Sc+5V/mois) · M4+ (+4S+2B+2Sc+5V/mois). Churn 0% (15% en scénario pessimiste).</p>
+</div>
+
+<!-- BÉNÉFICES CARDS -->
+<div class="pgrid rv">
+<div class="pcard"><div class="pm">Mois 1</div><div class="pv" style="color:var(--neon)">+81K</div><div class="pd">FCFA net</div></div>
+<div class="pcard"><div class="pm">Mois 2</div><div class="pv" style="color:var(--blue)">+792K</div><div class="pd">FCFA net</div></div>
+<div class="pcard"><div class="pm">Mois 3</div><div class="pv" style="color:var(--white)">+1,22M</div><div class="pd">FCFA net</div></div>
+<div class="pcard"><div class="pm">Mois 4</div><div class="pv" style="color:var(--neon)">+2,09M</div><div class="pd">FCFA net</div></div>
+<div class="pcard"><div class="pm">Mois 5</div><div class="pv" style="color:var(--blue)">+2,80M</div><div class="pd">FCFA net</div></div>
+<div class="pcard"><div class="pm">Mois 6</div><div class="pv" style="color:var(--white)">+3,51M</div><div class="pd">FCFA net</div></div>
+<div class="pcard"><div class="pm">Mois 7</div><div class="pv" style="color:var(--blue)">+4,22M</div><div class="pd">FCFA net</div></div>
+<div class="pcard" style="border-color:var(--neon);background:linear-gradient(135deg,rgba(57,255,20,.06),var(--card))"><div class="pm">Mois 8 🔥</div><div class="pv" style="color:var(--neon);text-shadow:0 0 15px rgba(57,255,20,.4)">+4,93M</div><div class="pd">FCFA net</div></div>
+</div>
+
+<!-- BAR CHART -->
+<div class="card rv" style="margin-bottom:1.5rem">
+<div class="ch" style="margin-bottom:.3rem">📊 Évolution du bénéfice net mensuel</div>
+<div class="bars" id="chart">
+<div class="bar-col"><div class="bar-val">81K</div><div class="bar-fill" data-h="2" style="background:linear-gradient(180deg,var(--neon),rgba(57,255,20,.3))"></div><div class="bar-label">M1</div></div>
+<div class="bar-col"><div class="bar-val">792K</div><div class="bar-fill" data-h="16" style="background:linear-gradient(180deg,var(--blue),rgba(91,140,255,.3))"></div><div class="bar-label">M2</div></div>
+<div class="bar-col"><div class="bar-val">1,22M</div><div class="bar-fill" data-h="25" style="background:linear-gradient(180deg,var(--neon),rgba(57,255,20,.3))"></div><div class="bar-label">M3</div></div>
+<div class="bar-col"><div class="bar-val">2,09M</div><div class="bar-fill" data-h="42" style="background:linear-gradient(180deg,var(--blue),rgba(91,140,255,.3))"></div><div class="bar-label">M4</div></div>
+<div class="bar-col"><div class="bar-val">2,80M</div><div class="bar-fill" data-h="57" style="background:linear-gradient(180deg,var(--neon),rgba(57,255,20,.3))"></div><div class="bar-label">M5</div></div>
+<div class="bar-col"><div class="bar-val">3,51M</div><div class="bar-fill" data-h="71" style="background:linear-gradient(180deg,var(--blue),rgba(91,140,255,.3))"></div><div class="bar-label">M6</div></div>
+<div class="bar-col"><div class="bar-val">4,22M</div><div class="bar-fill" data-h="86" style="background:linear-gradient(180deg,var(--neon),rgba(57,255,20,.3))"></div><div class="bar-label">M7</div></div>
+<div class="bar-col"><div class="bar-val">4,93M</div><div class="bar-fill" data-h="100" style="background:linear-gradient(180deg,var(--neon),#39ff14,rgba(57,255,20,.4))"></div><div class="bar-label">M8</div></div>
+</div>
+</div>
+
+<!-- DÉTAIL M1 -->
+<div class="card rv" style="margin-bottom:1.3rem">
+<div class="ch" style="margin-bottom:1rem">📋 Détail Mois 1 — Lancement</div>
+<div style="overflow-x:auto"><table class="tb">
+<thead><tr><th>Ligne</th><th>Détail</th><th>Montant</th></tr></thead>
+<tbody>
+<tr><td colspan="3" style="color:var(--neon);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em">Revenus</td></tr>
+<tr><td>Setup Starter ×4</td><td>4 × 100 000</td><td style="color:var(--neon)">400 000</td></tr>
+<tr><td>Setup Business ×1</td><td>1 × 150 000</td><td style="color:var(--neon)">150 000</td></tr>
+<tr><td>Visuels ×10</td><td>10 × 10 000</td><td style="color:var(--neon)">100 000</td></tr>
+<tr><td>Abonnements agents</td><td>1er mois gratuit</td><td style="color:var(--muted)">0</td></tr>
+<tr><td style="font-weight:700">Total revenus</td><td></td><td style="color:var(--white);font-weight:700">650 000</td></tr>
+<tr><td colspan="3" style="color:var(--red);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em">Charges</td></tr>
+<tr><td>Fixes (stack + David)</td><td>75 600 + 14 000</td><td style="color:var(--red)">89 600</td></tr>
+<tr><td>ANPI formalisation</td><td>One-shot</td><td style="color:var(--red)">100 000</td></tr>
+<tr><td>Marketing payant</td><td>FB/IG + TikTok + WA</td><td style="color:var(--red)">120 000</td></tr>
+<tr><td>API agents gratuits ×5</td><td>4S×40K + 1B×99K</td><td style="color:var(--red)">259 000</td></tr>
+<tr><td style="font-weight:700">Total charges</td><td></td><td style="color:var(--red);font-weight:700">568 600</td></tr>
+<tr style="background:var(--neonG2)"><td class="serif" style="font-weight:700;font-size:1.05rem" colspan="2">Bénéfice net M1</td><td class="serif" style="font-weight:700;font-size:1.05rem;color:var(--neon)">+81 400 FCFA</td></tr>
+</tbody></table></div>
+</div>
+
+<!-- DÉTAIL M8 -->
+<div class="card rv" style="margin-bottom:1.3rem">
+<div class="ch" style="margin-bottom:1rem">📋 Détail Mois 8 — Scale</div>
+<div style="overflow-x:auto"><table class="tb">
+<thead><tr><th>Ligne</th><th>Détail</th><th>Montant</th></tr></thead>
+<tbody>
+<tr><td colspan="3" style="color:var(--neon);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em">Revenus</td></tr>
+<tr><td>Starter récurrents ×26</td><td>26 × 90 000</td><td style="color:var(--neon)">2 340 000</td></tr>
+<tr><td>Business récurrents ×11</td><td>11 × 180 000</td><td style="color:var(--neon)">1 980 000</td></tr>
+<tr><td>Scale récurrents ×10</td><td>10 × 300 000</td><td style="color:var(--neon)">3 000 000</td></tr>
+<tr><td>Setups nouveaux</td><td>4S + 2B + 2Sc</td><td style="color:var(--neon)">1 600 000</td></tr>
+<tr><td>Visuels ×45</td><td>45 × 10 000</td><td style="color:var(--neon)">450 000</td></tr>
+<tr><td style="font-weight:700">Total revenus</td><td></td><td style="color:var(--white);font-weight:700">9 370 000</td></tr>
+<tr><td colspan="3" style="color:var(--red);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em">Charges</td></tr>
+<tr><td>Fixes + David + marketing</td><td>89 600 + 60 000</td><td style="color:var(--red)">149 600</td></tr>
+<tr><td>Variables agents payants</td><td>26S + 11B + 10Sc</td><td style="color:var(--red)">3 629 000</td></tr>
+<tr><td>Variables agents gratuits</td><td>4S + 2B + 2Sc (mois offert)</td><td style="color:var(--red)">658 000</td></tr>
+<tr><td style="font-weight:700">Total charges</td><td></td><td style="color:var(--red);font-weight:700">4 436 600</td></tr>
+<tr style="background:var(--neonG2)"><td class="serif" style="font-weight:700;font-size:1.05rem" colspan="2">Bénéfice net M8</td><td class="serif" style="font-weight:700;font-size:1.05rem;color:var(--neon)">+4 933 400 FCFA</td></tr>
+</tbody></table></div>
+</div>
+
+<!-- CUMULÉ -->
+<div class="nbox rv">
+<div style="display:flex;flex-wrap:wrap;gap:2.5rem;align-items:center;justify-content:space-between">
+<div>
+<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;color:var(--neon);margin-bottom:.4rem">Bénéfice cumulé sur 8 mois</div>
+<div class="serif" style="font-size:clamp(2.2rem,5vw,3.2rem);font-weight:700;color:var(--white)">19 644 200 <span style="font-size:1rem;color:var(--neon)">FCFA</span></div>
+</div>
+<div style="display:flex;gap:2rem;flex-wrap:wrap">
+<div><div style="font-size:.65rem;color:var(--muted);margin-bottom:.2rem">Clients actifs M8</div><div class="serif" style="font-weight:700;color:var(--white);font-size:1.15rem">30S + 13B + 12Sc + 45V = 100</div></div>
+<div><div style="font-size:.65rem;color:var(--muted);margin-bottom:.2rem">MRR au M8</div><div class="serif" style="font-weight:700;color:var(--neon);font-size:1.15rem">9 090 000 FCFA</div></div>
+</div>
+</div>
+</div>
+
+<!-- JALONS -->
+<div class="card rv" style="margin-top:1.3rem">
+<div class="ch" style="margin-bottom:1.2rem">📈 Jalons financiers</div>
+<div class="prg"><div class="prg-h"><span>Objectif 300K/mois</span><span>✅ Atteint M1</span></div><div class="prg-t"><div class="prg-f" data-w="100" style="background:linear-gradient(90deg,var(--neon),var(--blue))"></div></div></div>
+<div class="prg"><div class="prg-h"><span>Cap 1M bénéfice/mois</span><span>Mois 3</span></div><div class="prg-t"><div class="prg-f" data-w="90" style="background:linear-gradient(90deg,var(--blue),var(--neon))"></div></div></div>
+<div class="prg"><div class="prg-h"><span>Cap 3M bénéfice/mois</span><span>Mois 6</span></div><div class="prg-t"><div class="prg-f" data-w="65" style="background:linear-gradient(90deg,var(--neon),var(--amber))"></div></div></div>
+<div class="prg"><div class="prg-h"><span>100 clients actifs</span><span>Mois 8</span></div><div class="prg-t"><div class="prg-f" data-w="50" style="background:linear-gradient(90deg,var(--amber),var(--neon))"></div></div></div>
+<div class="prg"><div class="prg-h"><span>MRR 9M+ FCFA</span><span>Mois 8</span></div><div class="prg-t"><div class="prg-f" data-w="40" style="background:linear-gradient(90deg,var(--neon),#ff4b5e)"></div></div></div>
+</div>
+
+<!-- VS 80K -->
+<div class="card rv" style="margin-top:1.3rem">
+<div class="ch" style="margin-bottom:1rem">⚡ Budget 400K vs 80K — Ce qui change</div>
+<div style="overflow-x:auto"><table class="tb">
+<thead><tr><th>Critère</th><th>Budget 80K</th><th>Budget 400K</th><th>Différence</th></tr></thead>
+<tbody>
+<tr><td>Trésorerie de sécurité</td><td>12 800 FCFA</td><td style="color:var(--neon);font-weight:600">98 800 FCFA</td><td><span class="pill pill-g">×7,7</span></td></tr>
+<tr><td>Marketing payant M1</td><td>0</td><td style="color:var(--neon);font-weight:600">120 000 FCFA</td><td><span class="pill pill-g">+120K</span></td></tr>
+<tr><td>David (avatar)</td><td>Différé M2</td><td style="color:var(--neon);font-weight:600">Dès M1</td><td><span class="pill pill-g">−1 mois</span></td></tr>
+<tr><td>Formalisation ANPI</td><td>Non inclus</td><td style="color:var(--neon);font-weight:600">Inclus</td><td><span class="pill pill-g">✅</span></td></tr>
+<tr><td>Clients agents M1</td><td>2 Starter</td><td style="color:var(--neon);font-weight:600">4S + 1B</td><td><span class="pill pill-g">×2,5</span></td></tr>
+<tr><td>Bénéfice M1</td><td>+94 400</td><td style="color:var(--neon);font-weight:600">+81 400</td><td><span class="pill pill-a">−14% *</span></td></tr>
+<tr><td>Bénéfice cumulé M8</td><td>+17,3M</td><td style="color:var(--neon);font-weight:600">+19,6M</td><td><span class="pill pill-g">+2,3M</span></td></tr>
+<tr><td>Clients actifs M8</td><td>84</td><td style="color:var(--neon);font-weight:600">100</td><td><span class="pill pill-g">+16</span></td></tr>
+<tr><td>MRR M8</td><td>7,12M</td><td style="color:var(--neon);font-weight:600">9,09M</td><td><span class="pill pill-g">+28%</span></td></tr>
+</tbody></table></div>
+<div style="margin-top:.8rem;font-size:.75rem;color:var(--muted)">* M1 légèrement inférieur car ANPI + marketing payant absorbent du budget. L'écart se rattrape dès M2 et s'accumule jusqu'à +2,3M au M8.</div>
+</div>
+</section>
+
+<!-- ═══════ 07 · STACK & OPS ═══════ -->
+<div class="divider"></div>
+<section class="sec" id="ops">
+<div class="rv">
+<div class="tag">07 · Stack technique & Opérations</div>
+<h2 class="sh">La machine<br>derrière la lune.</h2>
+<p class="sp">100% no-code / vibe-code. Automatisé à 92%. Gérable depuis un téléphone, 3-4h par semaine.</p>
+</div>
+
+<div class="fbox rv"><div class="fl">⚡ Flow — Agent IA WhatsApp (production)</div><div class="flow">
+<div class="fn fn-a">💬 Client final</div><span class="fa">→</span><div class="fn fn-b">📱 WhatsApp API</div><span class="fa">→</span><div class="fn fn-a">🤖 Voiceflow + GPT-4o</div><span class="fa">→</span><div class="fn fn-c">💬 Réponse auto</div><span class="fa">→</span><div class="fn fn-b">📊 Log n8n</div>
+</div></div>
+
+<div class="fbox rv"><div class="fl">⚡ Flow — Visuels Marketing IA</div><div class="flow">
+<div class="fn fn-a">💬 "Fais un flyer"</div><span class="fa">→</span><div class="fn fn-b">🤖 GPT-4o extrait</div><span class="fa">→</span><div class="fn fn-a">⚙️ n8n → Bannerbear</div><span class="fa">→</span><div class="fn fn-c">🎨 Visuel</div><span class="fa">→</span><div class="fn fn-b">📤 WhatsApp</div>
+</div></div>
+
+<div class="g2 rv">
+<div class="card">
+<div class="ch" style="margin-bottom:.8rem">✅ Automatisé à 100%</div>
+<ul style="list-style:none"><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">◈</span> Conversations WhatsApp clients finaux</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">◈</span> Génération et livraison visuels</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">◈</span> Rapports mensuels</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">◈</span> Alertes de dépassement plafond</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">◈</span> Paiement → déclenchement auto</li></ul>
+</div>
+<div class="card">
+<div class="ch" style="margin-bottom:.8rem">⚠️ Intervention humaine (~8%)</div>
+<ul style="list-style:none"><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--amber)">◈</span> Setup nouvel agent (~2h/client)</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--amber)">◈</span> Nouveau template Bannerbear (~30min)</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--amber)">◈</span> Ajustements prompts (~15min)</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--amber)">◈</span> Support niveau 2</li><li style="padding:.25rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--amber)">◈</span> Vente et closing via David</li></ul>
+</div>
+</div>
+</section>
+
+<!-- ═══════ 08 · MARKETING ═══════ -->
+<div class="divider"></div>
+<section class="sec">
+<div class="rv">
+<div class="tag">08 · Stratégie marketing</div>
+<h2 class="sh">David parle.<br>L'IA délivre.</h2>
+<p class="sp">Avatar IA hyper-réaliste sur tous les réseaux dès M1. Budget pub dès le lancement. Machine de contenu + conversion.</p>
+</div>
+<div class="g2 rv" style="margin-bottom:1.3rem">
+<div class="card"><div class="ci">🎭</div><div class="ch">David — Le visage de Ngondet</div><div class="cp">Avatar homme 20 ans, moderne africain. Higgsfield (vidéo) + ElevenLabs (voix clonée). Français fluide + expressions gabonaises. C'est le gars du quartier qui a compris le game IA.</div></div>
+<div class="card"><div class="ci">🎯</div><div class="ch">Stratégie d'acquisition hybride</div><div class="cp">M1 : pub payante (120K) + contenu David. M2-3 : pub réduite (80K) + organique croissant. M4+ : pub maintenance (60K) + bouche-à-oreille + David viral.</div></div>
+</div>
+<div class="g4 rv">
+<div class="card" style="text-align:center"><div class="ci">📱</div><div class="ch">TikTok</div><div class="cp">Vidéos courtes David : avant/après, démos live, coulisses IA.</div></div>
+<div class="card" style="text-align:center"><div class="ci">📸</div><div class="ch">Instagram</div><div class="cp">Reels + carrousels : études de cas, visuels générés, résultats.</div></div>
+<div class="card" style="text-align:center"><div class="ci">👥</div><div class="ch">Facebook</div><div class="cp">Groupes PME africains. Témoignages. Pub ciblée entrepreneurs.</div></div>
+<div class="card" style="text-align:center"><div class="ci">👻</div><div class="ch">Snapchat</div><div class="cp">Stories backstage. Quotidien de David. Proximité jeune audience.</div></div>
+</div>
+</section>
+
+<!-- ═══════ 09 · ROADMAP ═══════ -->
+<div class="divider"></div>
+<section class="sec" id="road">
+<div class="rv">
+<div class="tag">09 · Roadmap de lancement</div>
+<h2 class="sh">30 jours.<br>2 services. Formalisé.</h2>
+<p class="sp">Formalisation + visuels d'abord (semaine 1), puis agents IA (semaine 2-3). Marketing payant dès J7.</p>
+</div>
+<div class="g2 rv">
+<div>
+<div class="ch" style="color:var(--neon);margin-bottom:1.2rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.1em">🏛️🎨 Semaine 1 — ANPI + Visuels</div>
+<div class="tl">
+<div class="tli"><div class="tl-w">Jours 1–2</div><div class="tl-t">Formalisation ANPI</div><ul class="tl-ul"><li>Dossier + paiement 100K</li><li>Statut entreprise en cours</li></ul></div>
+<div class="tli"><div class="tl-w">Jours 2–4</div><div class="tl-t">Templates Bannerbear</div><ul class="tl-ul"><li>3 templates (flyer, story, post)</li><li>Zones dynamiques configurées</li><li>API testée</li></ul></div>
+<div class="tli"><div class="tl-w">Jours 4–5</div><div class="tl-t">Agent WhatsApp visuels + n8n</div><ul class="tl-ul"><li>Flow complet demande → génération → livraison</li><li>10 tests end-to-end</li></ul></div>
+<div class="tli"><div class="tl-w">Jours 5–6</div><div class="tl-t">CinetPay + Landing page</div><ul class="tl-ul"><li>Paiement Mobile Money configuré</li><li>Page de vente live</li></ul></div>
+<div class="tli" style="margin-bottom:0"><div class="tl-w" style="color:var(--neon)">Jour 7 🚀</div><div class="tl-t" style="color:var(--neon)">LIVE visuels + Pub lancée</div></div>
+</div>
+</div>
+<div>
+<div class="ch" style="color:var(--blue);margin-bottom:1.2rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.1em">🤖 Semaine 2-3 — Agents IA</div>
+<div class="tl">
+<div class="tli"><div class="tl-w">Jours 8–11</div><div class="tl-t">Build agent Voiceflow</div><ul class="tl-ul"><li>Template agent PME de base</li><li>Connexion GPT-4o + WhatsApp</li></ul></div>
+<div class="tli"><div class="tl-w">Jours 12–14</div><div class="tl-t">Automatisation onboarding</div><ul class="tl-ul"><li>Workflow n8n complet</li><li>Rapports mensuels configurés</li></ul></div>
+<div class="tli"><div class="tl-w">Jours 15–18</div><div class="tl-t">David — Avatar IA</div><ul class="tl-ul"><li>ElevenLabs voix clonée</li><li>Higgsfield vidéos générées</li><li>Premiers contenus publiés</li></ul></div>
+<div class="tli"><div class="tl-w">Jours 18–25</div><div class="tl-t">3 démos gratuites agents</div><ul class="tl-ul"><li>Contacts réseau Gabon</li><li>Feedback → ajustements</li></ul></div>
+<div class="tli" style="margin-bottom:0"><div class="tl-w" style="color:var(--neon)">Semaine 3-4 🚀</div><div class="tl-t" style="color:var(--neon)">LIVE agents + 5 premiers clients</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══════ 10 · RISQUES ═══════ -->
+<div class="divider"></div>
+<section class="sec">
+<div class="rv">
+<div class="tag">10 · Gestion des risques</div>
+<h2 class="sh">Ce qui peut mal tourner.<br>Et les parades.</h2>
+</div>
+<div class="g2 rv">
+<div class="card">
+<div class="ch" style="color:var(--red)">⚠️ Risques identifiés</div>
+<ul style="list-style:none;margin-top:.8rem"><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--red)">1.</span> Hausse des prix API OpenAI</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--red)">2.</span> Client gros volume qui dépasse le plafond</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--red)">3.</span> Churn élevé (clients qui partent)</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--red)">4.</span> Panne VPS Hostinger</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--red)">5.</span> ROI marketing insuffisant</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--red)">6.</span> Méfiance client envers l'IA</li></ul>
+</div>
+<div class="card">
+<div class="ch" style="color:var(--neon)">🛡️ Mesures de protection</div>
+<ul style="list-style:none;margin-top:.8rem"><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">1.</span> Fallback GPT-4o-mini / Claude Haiku si prix montent</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">2.</span> Plafond contractuel + facturation auto au-delà</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">3.</span> Mois gratuit = engagement ; upsell réduit le churn</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">4.</span> Backup quotidien Hostinger inclus</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">5.</span> Trésorerie 98K = 1+ mois de marge si pub sous-performe</li><li style="padding:.35rem 0;font-size:.82rem;color:var(--muted);display:flex;gap:.4rem"><span style="color:var(--neon)">6.</span> David humanise la marque ; positionnement "Humain + IA"</li></ul>
+</div>
+</div>
+</section>
+
+<!-- ═══════ 11 · CONCLUSION ═══════ -->
+<div class="divider"></div>
+<section class="sec">
+<div class="rv">
+<div class="tag">11 · Conclusion</div>
+<h2 class="sh">La lune se lève.</h2>
+</div>
+<div class="nbox rv" style="text-align:center">
+<div style="font-size:3rem;margin-bottom:1.2rem">🌙</div>
+<div class="serif" style="font-size:clamp(1.2rem,2.8vw,1.9rem);font-weight:700;color:var(--white);max-width:700px;margin:0 auto 2rem">
+Ngondet Studio n'est pas un rêve.<br>C'est 400 000 FCFA. Une stack testée.<br>Un marché qui attend. Et une lune<br>qui éclaire le chemin.
+</div>
+<div class="g4" style="margin-bottom:1.8rem">
+<div style="text-align:center"><div class="serif" style="font-size:1.7rem;font-weight:700;color:var(--neon)">400K</div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Investissement</div></div>
+<div style="text-align:center"><div class="serif" style="font-size:1.7rem;font-weight:700;color:var(--white)">7 jours</div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Premier revenu</div></div>
+<div style="text-align:center"><div class="serif" style="font-size:1.7rem;font-weight:700;color:var(--neon)">100</div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Clients M8</div></div>
+<div style="text-align:center"><div class="serif" style="font-size:1.7rem;font-weight:700;color:var(--white)">19,6M</div><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em">Cumulé 8 mois</div></div>
+</div>
+<div class="serif" style="font-style:italic;font-size:1.05rem;color:var(--muted)">
+"Ngondet" — la lune en myènè.<br>Elle éclaire ceux qui avancent dans la nuit.
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<div style="font-size:2.5rem;margin-bottom:.8rem">🌙</div>
+<div class="serif" style="font-size:1.8rem;font-weight:700;color:var(--white)">Ngondet <span style="color:var(--neon)">Studio</span></div>
+<div style="color:var(--muted);font-size:.8rem;margin-top:.3rem">La lune en myènè · Gabon → Afrique → International</div>
+<div style="color:var(--muted);font-size:.65rem;margin-top:1.2rem;opacity:.4">Document confidentiel · Business Plan 2026 · Tous droits réservés</div>
+</footer>
+
+<script>
+// ═══ STARFIELD ═══
+(function(){
+const c=document.getElementById('sky'),x=c.getContext('2d');
+let w,h,stars=[];
+function resize(){w=c.width=innerWidth;h=c.height=innerHeight;stars=[];
+for(let i=0;i<200;i++)stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.3,a:Math.random(),s:Math.random()*.003+.001,d:Math.random()>.5?1:-1})}
+function draw(){x.clearRect(0,0,w,h);
+for(const s of stars){s.a+=s.s*s.d;if(s.a>1||s.a<.1)s.d*=-1;
+x.beginPath();x.arc(s.x,s.y,s.r,0,Math.PI*2);x.fillStyle=`rgba(255,255,255,${s.a})`;x.fill()}
+requestAnimationFrame(draw)}
+resize();draw();addEventListener('resize',resize)})();
+
+// ═══ REVEAL ═══
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){el.target.classList.add('vis');
+el.target.querySelectorAll('.prg-f[data-w]').forEach(b=>setTimeout(()=>b.style.width=b.dataset.w+'%',300));
+el.target.querySelectorAll('.bar-fill[data-h]').forEach(b=>setTimeout(()=>b.style.height=b.dataset.h+'%',200))}})},{threshold:.06});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// ═══ SMOOTH NAV ═══
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+</script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+{
+  "name": "Ngondet Studio — Pipeline Visuels IA v2 (Claude + Orshot)",
+  "nodes": [
+    {
+      "id": "node-webhook",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generer-visuel",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "node-set-context",
+      "name": "Set — Contexte Claude",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [720, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            { "name": "client_id", "value": "={{ $('Webhook Trigger').item.json.client_id }}", "type": "string" },
+            { "name": "mode_selection", "value": "={{ $('Webhook Trigger').item.json.mode_selection }}", "type": "string" },
+            { "name": "description_libre", "value": "={{ $('Webhook Trigger').item.json.description_libre }}", "type": "string" },
+            { "name": "type_visuel", "value": "={{ $('Webhook Trigger').item.json.type_visuel }}", "type": "string" },
+            { "name": "titre_principal", "value": "={{ $('Webhook Trigger').item.json.titre_principal || '' }}", "type": "string" },
+            { "name": "sous_titre", "value": "={{ $('Webhook Trigger').item.json.sous_titre || '' }}", "type": "string" },
+            { "name": "badge_offre", "value": "={{ $('Webhook Trigger').item.json.badge_offre || '' }}", "type": "string" },
+            { "name": "format", "value": "={{ $('Webhook Trigger').item.json.format || 'portrait' }}", "type": "string" },
+            { "name": "date_validite", "value": "={{ $('Webhook Trigger').item.json.date_validite || '' }}", "type": "string" },
+            { "name": "contact_info", "value": "={{ $('Webhook Trigger').item.json.contact_info || '' }}", "type": "string" },
+            { "name": "couleur_fond", "value": "={{ $('Webhook Trigger').item.json.couleur_fond || $('Webhook Trigger').item.json.couleur_principale || '#1A1A2E' }}", "type": "string" },
+            { "name": "note_style", "value": "={{ $('Webhook Trigger').item.json.note_style || '' }}", "type": "string" },
+            { "name": "logo_url", "value": "={{ $('Webhook Trigger').item.json.logo_url || '' }}", "type": "string" },
+            { "name": "couleur_principale", "value": "={{ $('Webhook Trigger').item.json.couleur_principale || '#1A1A2E' }}", "type": "string" },
+            { "name": "couleur_secondaire", "value": "={{ $('Webhook Trigger').item.json.couleur_secondaire || '#534AB7' }}", "type": "string" },
+            { "name": "template_flyer_id", "value": "={{ $('Webhook Trigger').item.json.template_flyer_id || '' }}", "type": "string" },
+            { "name": "template_story_id", "value": "={{ $('Webhook Trigger').item.json.template_story_id || '' }}", "type": "string" },
+            { "name": "template_post_id", "value": "={{ $('Webhook Trigger').item.json.template_post_id || '' }}", "type": "string" },
+            { "name": "image_reference_url", "value": "={{ $('Webhook Trigger').item.json.image_reference_url || null }}", "type": "string" },
+            { "name": "visuel_import_url", "value": "={{ $('Webhook Trigger').item.json.visuel_import_url || null }}", "type": "string" },
+            { "name": "templates_disponibles", "value": "={{ $('Webhook Trigger').item.json.templates_disponibles || [] }}", "type": "array" }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "node-claude",
+      "name": "Claude Haiku — Extraction Variables",
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [960, 300],
+      "credentials": {
+        "anthropicApi": {
+          "name": "Anthropic — Ngondet Studio"
+        }
+      },
+      "parameters": {
+        "model": "claude-haiku-4-5",
+        "temperature": 0.1,
+        "maxTokens": 800,
+        "messages": {
+          "values": [
+            {
+              "role": "user",
+              "content": "=Tu es un expert en création de visuels marketing pour Ngondet Studio, basé au Gabon.\n\nTu reçois une demande client et tu dois extraire et enrichir les variables pour générer un visuel professionnel.\n\nRÈGLES STRICTES :\n- Retourner UNIQUEMENT un objet JSON valide\n- Pas de texte avant ni après\n- Pas de backticks markdown\n- Si une info manque, déduire depuis la description ou mettre null\n- Respecter la charte graphique du client\n- Optimiser les textes pour qu'ils soient percutants (max 60 chars pour titre)\n- Si mode_selection = 'ia' : choisir le meilleur template parmi templates_disponibles\n- Si mode_selection = 'manuel' : utiliser le template_id fourni\n\nDESCRIPTION LIBRE :\n{{ $json.description_libre }}\n\nFORMULAIRE :\n- type_visuel: {{ $json.type_visuel }}\n- titre_principal: {{ $json.titre_principal }}\n- sous_titre: {{ $json.sous_titre }}\n- badge_offre: {{ $json.badge_offre }}\n- format: {{ $json.format }}\n- date_validite: {{ $json.date_validite }}\n- contact_info: {{ $json.contact_info }}\n- note_style: {{ $json.note_style }}\n\nCHARTE CLIENT :\n- couleur_principale: {{ $json.couleur_principale }}\n- couleur_secondaire: {{ $json.couleur_secondaire }}\n- logo_url: {{ $json.logo_url }}\n- couleur_fond_demandée: {{ $json.couleur_fond }}\n\nIMAGE RÉFÉRENCE : {{ $json.image_reference_url }}\nVISUEL À INTÉGRER : {{ $json.visuel_import_url }}\nMODE TEMPLATE : {{ $json.mode_selection }}\nTEMPLATES DISPONIBLES : {{ JSON.stringify($json.templates_disponibles) }}\n\nRETOURNE CE JSON ET RIEN D'AUTRE :\n{\n  \"template_id\": \"id du template choisi\",\n  \"titre_principal\": \"texte optimisé max 60 chars\",\n  \"sous_titre\": \"texte ou null\",\n  \"badge_offre\": \"texte ou null\",\n  \"date_validite\": \"texte ou null\",\n  \"contact_info\": \"texte ou null\",\n  \"couleur_fond\": \"#hex\",\n  \"logo_url\": \"url\",\n  \"visuel_import_url\": \"url ou null\",\n  \"style_extrait\": \"description du style analysé ou null\"\n}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node-function",
+      "name": "Function — Parse JSON Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 300],
+      "parameters": {
+        "jsCode": "const raw = $input.item.json.content?.[0]?.text || $input.item.json.text || '';\nconst clean = raw.replace(/```json|```/g, '').trim();\nlet parsed;\ntry {\n  parsed = JSON.parse(clean);\n} catch(e) {\n  throw new Error('Claude a retourné un JSON invalide : ' + raw);\n}\nconst ctx = $('Set — Contexte Claude').item.json;\nreturn [{\n  json: {\n    ...parsed,\n    client_id: ctx.client_id,\n    type_visuel: ctx.type_visuel,\n    format: ctx.format,\n    mode_selection: ctx.mode_selection,\n    generation_id: 'gen_' + Date.now()\n  }\n}];"
+      }
+    },
+    {
+      "id": "node-orshot",
+      "name": "Orshot — Génération Visuel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1440, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.orshot.com/v1/studio/render",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Authorization", "value": "Bearer os-8ytzsez7hqqu8knr2md22lbsvr7kr1" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ templateId: $json.template_id, modifications: { background_color: $json.couleur_fond, logo: $json.logo_url, titre_principal: $json.titre_principal, sous_titre: $json.sous_titre || '', badge_offre: $json.badge_offre || '', contact_info: $json.contact_info || '', date_validite: $json.date_validite || '', visuel_import: $json.visuel_import_url || '' }, response: { type: 'url', format: 'png', scale: 1 } }) }}",
+        "options": { "timeout": 60000 }
+      }
+    },
+    {
+      "id": "node-output",
+      "name": "Output — Retour Application",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1680, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            { "name": "success", "value": true, "type": "boolean" },
+            { "name": "generation_id", "value": "={{ $('Function — Parse JSON Claude').item.json.generation_id }}", "type": "string" },
+            { "name": "client_id", "value": "={{ $('Function — Parse JSON Claude').item.json.client_id }}", "type": "string" },
+            { "name": "type_visuel", "value": "={{ $('Function — Parse JSON Claude').item.json.type_visuel }}", "type": "string" },
+            { "name": "image_url", "value": "={{ $json.image_url || $json.url || $json.render_url }}", "type": "string" },
+            { "name": "template_id", "value": "={{ $('Function — Parse JSON Claude').item.json.template_id }}", "type": "string" },
+            { "name": "style_extrait", "value": "={{ $('Function — Parse JSON Claude').item.json.style_extrait }}", "type": "string" },
+            { "name": "parametres", "value": "={{ $('Function — Parse JSON Claude').item.json }}", "type": "object" },
+            { "name": "generated_at", "value": "={{ new Date().toISOString() }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [[{ "node": "Set — Contexte Claude", "type": "main", "index": 0 }]]
+    },
+    "Set — Contexte Claude": {
+      "main": [[{ "node": "Claude Haiku — Extraction Variables", "type": "main", "index": 0 }]]
+    },
+    "Claude Haiku — Extraction Variables": {
+      "main": [[{ "node": "Function — Parse JSON Claude", "type": "main", "index": 0 }]]
+    },
+    "Function — Parse JSON Claude": {
+      "main": [[{ "node": "Orshot — Génération Visuel", "type": "main", "index": 0 }]]
+    },
+    "Orshot — Génération Visuel": {
+      "main": [[{ "node": "Output — Retour Application", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "pinData": {
+    "Webhook Trigger": [
+      {
+        "json": {
+          "client_id": "CLIENT_TEST_001",
+          "mode_selection": "ia",
+          "description_libre": "Fais-moi un flyer pour une promo de -30% ce vendredi sur toute la collection",
+          "type_visuel": "flyer",
+          "titre_principal": "",
+          "sous_titre": "",
+          "badge_offre": "-30%",
+          "format": "portrait",
+          "date_validite": "Ce vendredi",
+          "contact_info": "+241 06 00 00 00",
+          "couleur_fond": "",
+          "note_style": "festif et accrocheur",
+          "image_reference_url": null,
+          "visuel_import_url": null,
+          "templates_disponibles": [
+            { "id": "12022", "nom": "Flyer Promo Standard", "type": "flyer", "source": "orshot" }
+          ]
+        }
+      }
+    ]
+  }
+}

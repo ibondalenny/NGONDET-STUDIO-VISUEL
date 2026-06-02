@@ -1,0 +1,160 @@
+{
+  "name": "Ngondet Studio — Pipeline Génération Visuels",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generer-visuel",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1000001-0000-0000-0000-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nconst systemPrompt = `Tu es un expert en création de visuels marketing pour Ngondet Studio, basé au Gabon.\n\nTu reçois :\n1. Une description libre du créateur\n2. Un formulaire structuré partiellement rempli\n3. Une image de référence (si fournie) — analyse le style, les couleurs dominantes, la composition, l'ambiance\n4. La liste des templates disponibles pour ce client\n\nTes tâches :\n- Si mode_selection = \"ia\" : choisir le template le plus adapté parmi templates_disponibles selon le type de visuel et la description\n- Enrichir et compléter les champs manquants en te basant sur la description libre\n- Si image de référence fournie : extraire le style (couleurs dominantes, ambiance, composition) et l'appliquer aux paramètres\n- Optimiser les textes pour qu'ils soient percutants\n- Retourner UNIQUEMENT un JSON valide, sans backticks\n\nFormat de sortie strict :\n{\n  \"template_id\": \"id choisi\",\n  \"titre_principal\": \"max 60 chars\",\n  \"sous_titre\": \"texte ou null\",\n  \"badge_offre\": \"texte ou null\",\n  \"date_validite\": \"texte ou null\",\n  \"contact_info\": \"texte ou null\",\n  \"couleur_fond\": \"#hex\",\n  \"logo_url\": \"url\",\n  \"visuel_import_url\": \"url ou null\",\n  \"style_extrait\": \"description du style analysé ou null\"\n}`;\n\nconst userText = `Mode sélection : ${data.mode_selection || 'manuel'}\nType de visuel : ${data.type_visuel || ''}\nDescription libre : ${data.description_libre || ''}\nTitre principal : ${data.titre_principal || ''}\nSous-titre : ${data.sous_titre || ''}\nBadge offre : ${data.badge_offre || ''}\nFormat : ${data.format || 'carré'}\nDate validité : ${data.date_validite || ''}\nContact : ${data.contact_info || ''}\nCouleur de fond : ${data.couleur_fond || data.couleur_principale || ''}\nNote style : ${data.note_style || ''}\nLogo URL : ${data.logo_url || ''}\nCouleur principale : ${data.couleur_principale || ''}\nCouleur secondaire : ${data.couleur_secondaire || ''}\nPolice : ${data.police || ''}\nImage référence : ${data.image_reference_url || 'non fournie'}\nVisuel import : ${data.visuel_import_url || 'non fourni'}\nTemplate sélectionné : ${data.template_id || 'aucun — mode IA actif'}\nTemplates disponibles : ${JSON.stringify(data.templates_disponibles || [])}`;\n\nconst messages = [{ role: 'system', content: systemPrompt }];\n\nif (data.image_reference_url) {\n  messages.push({\n    role: 'user',\n    content: [\n      { type: 'text', text: userText },\n      { type: 'image_url', image_url: { url: data.image_reference_url } }\n    ]\n  });\n} else {\n  messages.push({ role: 'user', content: userText });\n}\n\nreturn [{\n  json: {\n    payload: {\n      model: 'gpt-4o',\n      messages,\n      temperature: 0.7,\n      max_tokens: 1000,\n      response_format: { type: 'json_object' }\n    },\n    source: data\n  }\n}];"
+      },
+      "id": "a1000001-0000-0000-0000-000000000002",
+      "name": "Construire prompt GPT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.payload) }}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "a1000001-0000-0000-0000-000000000003",
+      "name": "GPT-4o",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const gptData = $input.first().json;\nconst source = $('Construire prompt GPT').first().json.source;\n\nlet parsed;\ntry {\n  const raw = gptData.choices[0].message.content;\n  const clean = raw.replace(/```json|```/g, '').trim();\n  parsed = JSON.parse(clean);\n} catch (e) {\n  throw new Error('Impossible de parser la réponse GPT : ' + e.message);\n}\n\nreturn [{\n  json: {\n    ...parsed,\n    client_id: source.client_id,\n    generation_id: source.generation_id,\n    source\n  }\n}];"
+      },
+      "id": "a1000001-0000-0000-0000-000000000004",
+      "name": "Parser réponse GPT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sync.api.bannerbear.com/v2/images",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.BANNERBEAR_API_KEY }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({\n  template: $json.template_id,\n  modifications: [\n    { name: 'background_color', color: $json.couleur_fond || $json.source.couleur_principale || '#000000' },\n    { name: 'logo', image_url: $json.logo_url || $json.source.logo_url || '' },\n    { name: 'titre_principal', text: $json.titre_principal || '' },\n    { name: 'sous_titre', text: $json.sous_titre || '' },\n    { name: 'badge_offre', text: $json.badge_offre || '' },\n    { name: 'contact_info', text: $json.contact_info || $json.source.contact_info || '' },\n    { name: 'date_validite', text: $json.date_validite || '' },\n    { name: 'visuel_import', image_url: $json.visuel_import_url || $json.source.visuel_import_url || '' }\n  ]\n}) }}",
+        "options": {
+          "timeout": 60000
+        }
+      },
+      "id": "a1000001-0000-0000-0000-000000000005",
+      "name": "Bannerbear",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const bb = $input.first().json;\nconst parsed = $('Parser réponse GPT').first().json;\n\nreturn [{\n  json: {\n    success: true,\n    generation_id: parsed.generation_id,\n    image_url: bb.image_url || bb.image_url_png || null,\n    image_url_jpg: bb.image_url_jpg || null,\n    template_id: parsed.template_id,\n    style_extrait: parsed.style_extrait || null,\n    parametres: {\n      titre_principal: parsed.titre_principal,\n      sous_titre: parsed.sous_titre,\n      badge_offre: parsed.badge_offre,\n      date_validite: parsed.date_validite,\n      contact_info: parsed.contact_info,\n      couleur_fond: parsed.couleur_fond,\n      logo_url: parsed.logo_url,\n      visuel_import_url: parsed.visuel_import_url\n    }\n  }\n}];"
+      },
+      "id": "a1000001-0000-0000-0000-000000000006",
+      "name": "Formater réponse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1350, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "a1000001-0000-0000-0000-000000000007",
+      "name": "Répondre au Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1570, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [{ "node": "Construire prompt GPT", "type": "main", "index": 0 }]
+      ]
+    },
+    "Construire prompt GPT": {
+      "main": [
+        [{ "node": "GPT-4o", "type": "main", "index": 0 }]
+      ]
+    },
+    "GPT-4o": {
+      "main": [
+        [{ "node": "Parser réponse GPT", "type": "main", "index": 0 }]
+      ]
+    },
+    "Parser réponse GPT": {
+      "main": [
+        [{ "node": "Bannerbear", "type": "main", "index": 0 }]
+      ]
+    },
+    "Bannerbear": {
+      "main": [
+        [{ "node": "Formater réponse", "type": "main", "index": 0 }]
+      ]
+    },
+    "Formater réponse": {
+      "main": [
+        [{ "node": "Répondre au Webhook", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null
+}

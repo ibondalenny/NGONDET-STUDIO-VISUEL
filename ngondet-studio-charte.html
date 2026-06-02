@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ngondet Studio — Charte Graphique</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #060b18;
+    --night-2: #0d1628;
+    --night-3: #111d35;
+    --blue: #00c8f5;
+    --blue-dim: rgba(0,200,245,0.15);
+    --blue-border: rgba(0,200,245,0.25);
+    --green: #00f598;
+    --green-dim: rgba(0,245,152,0.12);
+    --green-border: rgba(0,245,152,0.22);
+    --white: #ffffff;
+    --white-70: rgba(255,255,255,0.70);
+    --white-40: rgba(255,255,255,0.40);
+    --white-15: rgba(255,255,255,0.15);
+    --white-08: rgba(255,255,255,0.08);
+    --white-04: rgba(255,255,255,0.04);
+    --glass-bg: rgba(255,255,255,0.055);
+    --glass-border: rgba(255,255,255,0.10);
+    --glass-blur: blur(20px);
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--night);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Stars background */
+  .stars-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: var(--op-min, 0.2); }
+    50% { opacity: var(--op-max, 0.9); }
+  }
+
+  /* Page layout */
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 32px 100px;
+  }
+
+  /* Section */
+  .section { margin-bottom: 80px; }
+
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white-40);
+    letter-spacing: 0.05em;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid var(--white-08);
+  }
+
+  /* Glass card */
+  .glass-card {
+    background: var(--glass-bg);
+    border: 0.5px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    padding: 28px 32px;
+  }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  @media (max-width: 640px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ===================== HERO ===================== */
+  .hero {
+    text-align: center;
+    padding: 80px 0 60px;
+    position: relative;
+  }
+
+  .hero-moon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 36px;
+    position: relative;
+  }
+
+  .hero-moon svg { width: 100%; height: 100%; }
+
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff 0%, #a8d8ff 50%, #00f598 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+
+  .hero-studio {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 24px;
+  }
+
+  .hero-slogan {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--white-40);
+    letter-spacing: 0.08em;
+  }
+
+  .hero-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--white-15), transparent);
+    margin: 40px auto 0;
+  }
+
+  /* ===================== LOGO VERSIONS ===================== */
+  .logo-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  .logo-box {
+    border-radius: var(--radius-lg);
+    padding: 36px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 160px;
+  }
+
+  .logo-box.dark { background: var(--night-3); border: 0.5px solid var(--white-08); }
+  .logo-box.glass { background: var(--glass-bg); border: 0.5px solid var(--glass-border); backdrop-filter: var(--glass-blur); }
+  .logo-box.light { background: #f0f4ff; border: 0.5px solid rgba(0,0,0,0.08); }
+
+  .logo-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-text-n {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+
+  .logo-text-s {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .logo-box-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ===================== COULEURS ===================== */
+  .color-swatch {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 0.5px solid var(--white-08);
+  }
+
+  .swatch-fill {
+    height: 80px;
+    width: 100%;
+  }
+
+  .swatch-info {
+    padding: 12px 14px;
+    background: var(--glass-bg);
+  }
+
+  .swatch-name {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+
+  .swatch-hex {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--white-40);
+    letter-spacing: 0.05em;
+  }
+
+  .swatch-role {
+    font-size: 11px;
+    color: var(--white-40);
+    margin-top: 4px;
+  }
+
+  /* ===================== TYPO ===================== */
+  .typo-row {
+    padding: 24px 0;
+    border-bottom: 0.5px solid var(--white-08);
+  }
+  .typo-row:last-child { border-bottom: none; }
+
+  .typo-meta {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white-40);
+    margin-bottom: 8px;
+  }
+
+  /* ===================== COMPOSANTS ===================== */
+  .comp-label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white-40);
+    margin-bottom: 14px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--blue) 0%, #0098d4 100%);
+    color: var(--night);
+  }
+
+  .btn-secondary {
+    background: var(--green-dim);
+    border: 0.5px solid var(--green-border);
+    color: var(--green);
+  }
+
+  .btn-ghost {
+    background: var(--white-08);
+    border: 0.5px solid var(--white-15);
+    color: var(--white-70);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 0.5px solid var(--blue-border);
+    color: var(--blue);
+  }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .badge-blue { background: var(--blue-dim); border: 0.5px solid var(--blue-border); color: var(--blue); }
+  .badge-green { background: var(--green-dim); border: 0.5px solid var(--green-border); color: var(--green); }
+  .badge-glass { background: var(--white-08); border: 0.5px solid var(--white-15); color: var(--white-70); }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* Cards */
+  .stat-card {
+    background: var(--glass-bg);
+    border: 0.5px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .stat-card.blue-accent { border-color: var(--blue-border); background: var(--blue-dim); }
+  .stat-card.green-accent { border-color: var(--green-border); background: var(--green-dim); }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label { font-size: 12px; color: var(--white-40); }
+
+  /* Input */
+  .input-field {
+    width: 100%;
+    background: var(--white-04);
+    border: 0.5px solid var(--white-15);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-field::placeholder { color: var(--white-40); }
+  .input-field:focus { border-color: var(--blue); }
+
+  /* ===================== TEMPLATES ===================== */
+  .template-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* Post carré */
+  .post-square {
+    aspect-ratio: 1;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    background: var(--night-2);
+    border: 0.5px solid var(--white-08);
+  }
+
+  .post-square .post-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(0,200,245,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(0,245,152,0.10) 0%, transparent 55%);
+  }
+
+  .post-square .post-content {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Story */
+  .post-story {
+    aspect-ratio: 9/16;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    background: var(--night-2);
+    border: 0.5px solid var(--white-08);
+    max-height: 420px;
+  }
+
+  .post-story .story-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 20%, rgba(0,200,245,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 30% 80%, rgba(0,245,152,0.12) 0%, transparent 50%);
+  }
+
+  .post-story .story-content {
+    position: relative;
+    z-index: 1;
+    padding: 28px 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Mini logo inline */
+  .mini-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mini-logo-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    color: white;
+  }
+
+  .mini-logo-studio {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 8px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--blue);
+  }
+
+  /* ===================== CARTE DE VISITE ===================== */
+  .business-card {
+    aspect-ratio: 1.75;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    background: var(--night-2);
+    border: 0.5px solid var(--white-08);
+    max-width: 420px;
+  }
+
+  .bc-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 90% 10%, rgba(0,200,245,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 10% 90%, rgba(0,245,152,0.12) 0%, transparent 50%);
+  }
+
+  .bc-content {
+    position: relative;
+    z-index: 1;
+    padding: 28px 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* ===================== DON'TS ===================== */
+  .dont-item {
+    display: flex;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 0.5px solid var(--white-08);
+    align-items: flex-start;
+  }
+  .dont-item:last-child { border-bottom: none; }
+
+  .dont-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,60,60,0.12);
+    border: 0.5px solid rgba(255,60,60,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #ff6b6b;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .dont-text { font-size: 14px; color: var(--white-70); line-height: 1.6; }
+  .dont-text strong { color: var(--white); font-weight: 500; }
+
+  /* Page header */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+    border-bottom: 0.5px solid var(--white-08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(6,11,24,0.85);
+    backdrop-filter: blur(16px);
+  }
+
+  .page-header-logo {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 0.02em;
+  }
+
+  .page-header-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--white-40);
+  }
+
+  /* Divider */
+  hr.fancy {
+    border: none;
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, var(--white-15), transparent);
+    margin: 0 0 80px;
+  }
+
+  /* Spacing helpers */
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mb-24 { margin-bottom: 24px; }
+  .mb-32 { margin-bottom: 32px; }
+  .flex { display: flex; }
+  .flex-wrap { flex-wrap: wrap; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .gap-16 { gap: 16px; }
+  .items-center { align-items: center; }
+
+  /* Neon glow effect on accents */
+  .glow-blue { text-shadow: 0 0 20px rgba(0,200,245,0.5); }
+  .glow-green { text-shadow: 0 0 20px rgba(0,245,152,0.4); }
+
+  /* Animation on load */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    animation: fadeUp 0.7s ease forwards;
+    opacity: 0;
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.2s; }
+  .fade-up:nth-child(3) { animation-delay: 0.3s; }
+  .fade-up:nth-child(4) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars-layer" id="stars"></div>
+
+<!-- Header -->
+<header class="page-header">
+  <div class="page-header-logo">Ngondet Studio</div>
+  <div class="page-header-label">Charte Graphique — 2025</div>
+</header>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero fade-up">
+    <div class="hero-moon">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Glow -->
+        <circle cx="55" cy="45" r="32" fill="rgba(0,200,245,0.06)"/>
+        <!-- Moon body -->
+        <circle cx="55" cy="45" r="26" fill="#d8eeff" opacity="0.92"/>
+        <!-- Shadow to create crescent -->
+        <circle cx="46" cy="45" r="26" fill="#060b18"/>
+        <!-- Stars around moon -->
+        <circle cx="82" cy="22" r="2.5" fill="#00f598" opacity="0.9"/>
+        <circle cx="88" cy="34" r="1.5" fill="#00c8f5" opacity="0.85"/>
+        <circle cx="78" cy="68" r="1.5" fill="white" opacity="0.7"/>
+        <circle cx="20" cy="28" r="1" fill="white" opacity="0.6"/>
+        <circle cx="14" cy="58" r="1.5" fill="#00c8f5" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="hero-name">Ngondet</div>
+    <div class="hero-studio">Studio</div>
+    <div class="hero-slogan">Éclairez votre image</div>
+    <div class="hero-divider"></div>
+  </div>
+
+  <!-- 01 — LOGO -->
+  <div class="section fade-up">
+    <div class="section-label">01</div>
+    <div class="section-title">Logo & variantes</div>
+
+    <div class="logo-showcase mb-16">
+      <!-- Version principale sombre -->
+      <div class="logo-box dark">
+        <div class="logo-inline">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="20" cy="18" r="14" fill="#d8eeff" opacity="0.88"/>
+            <circle cx="15" cy="18" r="14" fill="#060b18"/>
+            <circle cx="28" cy="10" r="2" fill="#00f598"/>
+            <circle cx="32" cy="18" r="1.2" fill="#00c8f5"/>
+          </svg>
+          <div>
+            <div class="logo-text-n" style="color: white;">Ngondet</div>
+            <div class="logo-text-s" style="color: var(--blue);">Studio</div>
+          </div>
+        </div>
+        <div class="logo-box-label" style="color: var(--white-40); font-size: 11px;">Principale — fond sombre</div>
+      </div>
+
+      <!-- Version glass -->
+      <div class="logo-box glass">
+        <div class="logo-inline">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="20" cy="18" r="14" fill="#d8eeff" opacity="0.88"/>
+            <circle cx="15" cy="18" r="14" fill="rgba(6,11,24,0.7)"/>
+            <circle cx="28" cy="10" r="2" fill="#00f598"/>
+            <circle cx="32" cy="18" r="1.2" fill="#00c8f5"/>
+          </svg>
+          <div>
+            <div class="logo-text-n" style="color: white;">Ngondet</div>
+            <div class="logo-text-s" style="color: var(--green);">Studio</div>
+          </div>
+        </div>
+        <div class="logo-box-label" style="color: var(--white-40); font-size: 11px;">Variante — fond glass</div>
+      </div>
+
+      <!-- Version claire -->
+      <div class="logo-box light">
+        <div class="logo-inline">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="20" cy="18" r="14" fill="#0d1628" opacity="0.9"/>
+            <circle cx="15" cy="18" r="14" fill="#f0f4ff"/>
+            <circle cx="28" cy="10" r="2" fill="#00a86b"/>
+            <circle cx="32" cy="18" r="1.2" fill="#0085c7"/>
+          </svg>
+          <div>
+            <div class="logo-text-n" style="color: #0d1628;">Ngondet</div>
+            <div class="logo-text-s" style="color: #0085c7;">Studio</div>
+          </div>
+        </div>
+        <div class="logo-box-label" style="color: #888; font-size: 11px;">Variante — fond clair</div>
+      </div>
+    </div>
+
+    <!-- Icône seule -->
+    <div class="glass-card">
+      <p class="comp-label">Icône seule — usages miniatures</p>
+      <div class="flex gap-16 items-center flex-wrap">
+        <div style="width:64px;height:64px;background:var(--night-3);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <circle cx="23" cy="20" r="15" fill="#d8eeff" opacity="0.88"/>
+            <circle cx="17" cy="20" r="15" fill="#060b18"/>
+            <circle cx="31" cy="11" r="2.2" fill="#00f598"/>
+            <circle cx="36" cy="20" r="1.4" fill="#00c8f5"/>
+          </svg>
+        </div>
+        <div style="width:48px;height:48px;background:var(--night-3);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+          <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+            <circle cx="23" cy="20" r="15" fill="#d8eeff" opacity="0.88"/>
+            <circle cx="17" cy="20" r="15" fill="#060b18"/>
+            <circle cx="31" cy="11" r="2.2" fill="#00f598"/>
+            <circle cx="36" cy="20" r="1.4" fill="#00c8f5"/>
+          </svg>
+        </div>
+        <div style="width:32px;height:32px;background:var(--night-3);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+            <circle cx="23" cy="20" r="15" fill="#d8eeff" opacity="0.88"/>
+            <circle cx="17" cy="20" r="15" fill="#060b18"/>
+            <circle cx="31" cy="11" r="2.2" fill="#00f598"/>
+          </svg>
+        </div>
+        <div style="font-size:13px;color:var(--white-40);line-height:1.7;">
+          Favicon · Avatar WhatsApp<br>Profil réseaux sociaux · App icon
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 — COULEURS -->
+  <div class="section fade-up">
+    <div class="section-label">02</div>
+    <div class="section-title">Palette de couleurs</div>
+
+    <div class="grid-4 mb-16">
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#060b18;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Nuit profonde</div>
+          <div class="swatch-hex">#060b18</div>
+          <div class="swatch-role">Fond principal</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#111d35;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Nuit secondaire</div>
+          <div class="swatch-hex">#111d35</div>
+          <div class="swatch-role">Fond cartes</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#00c8f5;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Bleu lune</div>
+          <div class="swatch-hex">#00c8f5</div>
+          <div class="swatch-role">Accent principal</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#00f598;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Vert éclat</div>
+          <div class="swatch-hex">#00f598</div>
+          <div class="swatch-role">Accent secondaire</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <p class="comp-label">Couleurs texte</p>
+      <div class="flex gap-16 flex-wrap">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:24px;height:24px;border-radius:50%;background:white;"></div>
+          <div>
+            <div style="font-size:13px;color:white;font-weight:500;">Blanc 100%</div>
+            <div style="font-size:11px;color:var(--white-40);">Titres principaux</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.70);"></div>
+          <div>
+            <div style="font-size:13px;color:var(--white-70);font-weight:500;">Blanc 70%</div>
+            <div style="font-size:11px;color:var(--white-40);">Corps de texte</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.40);"></div>
+          <div>
+            <div style="font-size:13px;color:var(--white-40);font-weight:500;">Blanc 40%</div>
+            <div style="font-size:11px;color:var(--white-40);">Métadonnées</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:24px;height:24px;border-radius:50%;background:#00c8f5;"></div>
+          <div>
+            <div style="font-size:13px;color:var(--blue);font-weight:500;">Bleu lune</div>
+            <div style="font-size:11px;color:var(--white-40);">Accents & liens</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 — TYPOGRAPHIE -->
+  <div class="section fade-up">
+    <div class="section-label">03</div>
+    <div class="section-title">Système typographique</div>
+
+    <div class="glass-card">
+      <div class="typo-row">
+        <div class="typo-meta">Display — Syne 800 · Titres héros</div>
+        <div style="font-family:var(--font-display);font-size:48px;font-weight:800;color:white;line-height:1;letter-spacing:-0.01em;">Ngondet Studio</div>
+      </div>
+      <div class="typo-row">
+        <div class="typo-meta">H1 — Syne 700 · Titres de section</div>
+        <div style="font-family:var(--font-display);font-size:32px;font-weight:700;color:white;line-height:1.15;">Éclairez votre image</div>
+      </div>
+      <div class="typo-row">
+        <div class="typo-meta">H2 — Syne 600 · Sous-titres</div>
+        <div style="font-family:var(--font-display);font-size:22px;font-weight:600;color:white;line-height:1.3;">Visuels marketing professionnels</div>
+      </div>
+      <div class="typo-row">
+        <div class="typo-meta">Label — Syne 600 · Caps espacés · Accents</div>
+        <div style="font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--blue);letter-spacing:0.22em;text-transform:uppercase;">Studio · Gabon · IA</div>
+      </div>
+      <div class="typo-row">
+        <div class="typo-meta">Body — DM Sans 400 · Corps de texte</div>
+        <div style="font-family:var(--font-body);font-size:15px;font-weight:400;color:var(--white-70);line-height:1.7;">Nous utilisons les meilleurs modèles d'IA combinés à l'expertise d'un infographiste pour produire des visuels marketing professionnels en moins de 2 minutes.</div>
+      </div>
+      <div class="typo-row">
+        <div class="typo-meta">Small — DM Sans 300 · Métadonnées</div>
+        <div style="font-family:var(--font-body);font-size:13px;font-weight:300;color:var(--white-40);letter-spacing:0.04em;">Libreville, Gabon · Depuis 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 — GLASSMORPHISM -->
+  <div class="section fade-up">
+    <div class="section-label">04</div>
+    <div class="section-title">Glassmorphism — règles & composants</div>
+
+    <div class="glass-card mb-16">
+      <p class="comp-label">Recette glass</p>
+      <div class="grid-3" style="gap:12px;">
+        <div style="background:var(--white-04);border:0.5px solid var(--white-08);border-radius:var(--radius-md);padding:16px;">
+          <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:6px;letter-spacing:0.06em;">NEUTRE</div>
+          <div style="font-size:12px;color:var(--white-70);line-height:1.8;">bg: rgba(255,255,255, 0.055)<br>border: rgba(255,255,255, 0.10)<br>blur: 20px</div>
+        </div>
+        <div style="background:var(--blue-dim);border:0.5px solid var(--blue-border);border-radius:var(--radius-md);padding:16px;">
+          <div style="font-size:12px;color:var(--blue);font-weight:600;margin-bottom:6px;letter-spacing:0.06em;">BLEU</div>
+          <div style="font-size:12px;color:var(--white-70);line-height:1.8;">bg: rgba(0,200,245, 0.15)<br>border: rgba(0,200,245, 0.25)<br>blur: 20px</div>
+        </div>
+        <div style="background:var(--green-dim);border:0.5px solid var(--green-border);border-radius:var(--radius-md);padding:16px;">
+          <div style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:6px;letter-spacing:0.06em;">VERT</div>
+          <div style="font-size:12px;color:var(--white-70);line-height:1.8;">bg: rgba(0,245,152, 0.12)<br>border: rgba(0,245,152, 0.22)<br>blur: 20px</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="glass-card mb-16">
+      <p class="comp-label">Cartes de statistiques</p>
+      <div class="grid-3">
+        <div class="stat-card blue-accent">
+          <div class="stat-value" style="color:var(--blue);">40</div>
+          <div class="stat-label">visuels / mois</div>
+        </div>
+        <div class="stat-card green-accent">
+          <div class="stat-value" style="color:var(--green);">2 min</div>
+          <div class="stat-label">délai de livraison</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:white;">100%</div>
+          <div class="stat-label">contrôlé par expert</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="glass-card mb-16">
+      <p class="comp-label">Boutons</p>
+      <div class="flex gap-12 flex-wrap">
+        <button class="btn btn-primary">Commander un visuel</button>
+        <button class="btn btn-secondary">Voir les forfaits</button>
+        <button class="btn btn-ghost">En savoir plus</button>
+        <button class="btn btn-outline">Nous contacter</button>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="glass-card mb-16">
+      <p class="comp-label">Badges & étiquettes</p>
+      <div class="flex gap-8 flex-wrap">
+        <span class="badge badge-blue"><span class="badge-dot"></span>IA active</span>
+        <span class="badge badge-green"><span class="badge-dot"></span>Livré</span>
+        <span class="badge badge-glass">Premium</span>
+        <span class="badge badge-blue">Flyer</span>
+        <span class="badge badge-green">Story Instagram</span>
+        <span class="badge badge-glass">Menu restaurant</span>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="glass-card">
+      <p class="comp-label">Champ de saisie</p>
+      <input class="input-field" placeholder="Décrivez votre visuel… ex: flyer promo ramadan pour ma boulangerie" style="max-width:500px;">
+    </div>
+  </div>
+
+  <!-- 05 — TEMPLATES -->
+  <div class="section fade-up">
+    <div class="section-label">05</div>
+    <div class="section-title">Applications — exemples de visuels</div>
+
+    <div class="template-grid">
+      <!-- Post carré -->
+      <div>
+        <p class="comp-label mb-12">Post carré Instagram</p>
+        <div class="post-square">
+          <div class="post-bg"></div>
+          <!-- Stars in post -->
+          <div id="post-stars" style="position:absolute;inset:0;pointer-events:none;"></div>
+          <div class="post-content">
+            <div class="mini-logo">
+              <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+                <circle cx="20" cy="18" r="14" fill="#d8eeff" opacity="0.85"/>
+                <circle cx="15" cy="18" r="14" fill="#0d1628"/>
+                <circle cx="28" cy="10" r="1.8" fill="#00f598"/>
+              </svg>
+              <div>
+                <div class="mini-logo-name">Ngondet</div>
+                <div class="mini-logo-studio">Studio</div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;">Offre spéciale</div>
+              <div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:white;line-height:1.15;margin-bottom:10px;">–30%<br>sur vos plats</div>
+              <div style="font-size:12px;color:var(--white-40);">Valable ce weekend uniquement</div>
+            </div>
+            <div class="flex items-center" style="justify-content:space-between;">
+              <span class="badge badge-green" style="font-size:11px;padding:3px 10px;"><span class="badge-dot"></span>Disponible</span>
+              <span style="font-size:11px;color:var(--white-40);">ngondet.studio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Story -->
+      <div>
+        <p class="comp-label mb-12">Story Instagram / Facebook</p>
+        <div class="post-story">
+          <div class="story-bg"></div>
+          <div class="story-content">
+            <div class="mini-logo">
+              <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
+                <circle cx="20" cy="18" r="14" fill="#d8eeff" opacity="0.85"/>
+                <circle cx="15" cy="18" r="14" fill="#0d1628"/>
+                <circle cx="28" cy="10" r="1.8" fill="#00f598"/>
+              </svg>
+              <div>
+                <div class="mini-logo-name">Ngondet</div>
+                <div class="mini-logo-studio">Studio</div>
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">Nouveau service</div>
+              <div style="font-family:var(--font-display);font-size:28px;font-weight:800;color:white;line-height:1.1;margin-bottom:14px;">Visuels pro en 2 minutes</div>
+              <div style="font-size:13px;color:var(--white-40);line-height:1.6;">Propulsé par l'IA.<br>Validé par un expert.</div>
+            </div>
+            <div style="text-align:center;">
+              <button class="btn btn-primary" style="font-size:13px;padding:10px 22px;">Commander maintenant</button>
+              <div style="font-size:11px;color:var(--white-40);margin-top:10px;">ngondet.studio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte de visite -->
+    <div style="margin-top:20px;">
+      <p class="comp-label mb-12">Carte de visite</p>
+      <div class="business-card">
+        <div class="bc-bg"></div>
+        <div id="bc-stars" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:var(--radius-lg);"></div>
+        <div class="bc-content">
+          <div class="flex items-center" style="gap:14px;">
+            <svg width="42" height="42" viewBox="0 0 36 36" fill="none">
+              <circle cx="20" cy="18" r="14" fill="#d8eeff" opacity="0.88"/>
+              <circle cx="15" cy="18" r="14" fill="#0d1628"/>
+              <circle cx="28" cy="10" r="2" fill="#00f598"/>
+              <circle cx="32" cy="18" r="1.2" fill="#00c8f5"/>
+            </svg>
+            <div>
+              <div style="font-family:var(--font-display);font-size:20px;font-weight:700;color:white;line-height:1;">Ngondet</div>
+              <div style="font-family:var(--font-display);font-size:9px;font-weight:600;letter-spacing:0.28em;text-transform:uppercase;color:var(--blue);margin-top:2px;">Studio</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;color:var(--white-40);margin-bottom:4px;letter-spacing:0.04em;">Studio de visuels marketing IA</div>
+            <div style="font-size:12px;color:var(--white-40);">Libreville, Gabon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 — DON'TS -->
+  <div class="section fade-up">
+    <div class="section-label">06</div>
+    <div class="section-title">À ne jamais faire</div>
+
+    <div class="glass-card">
+      <div class="dont-item">
+        <div class="dont-icon">✕</div>
+        <div class="dont-text"><strong>Ne jamais utiliser le logo sur fond blanc ou coloré</strong> — le logo est conçu exclusivement pour les fonds sombres. Sur fond clair, utiliser la variante dédiée uniquement.</div>
+      </div>
+      <div class="dont-item">
+        <div class="dont-icon">✕</div>
+        <div class="dont-text"><strong>Ne jamais déformer ou étirer le logo</strong> — respecter les proportions d'origine. L'icône lune ne doit pas être redimensionnée séparément du texte.</div>
+      </div>
+      <div class="dont-item">
+        <div class="dont-icon">✕</div>
+        <div class="dont-text"><strong>Ne jamais utiliser d'autres couleurs principales</strong> — la palette est fixe. Pas de rouge, orange, jaune ou violet. Les seules couleurs accentuées sont le bleu #00c8f5 et le vert #00f598.</div>
+      </div>
+      <div class="dont-item">
+        <div class="dont-icon">✕</div>
+        <div class="dont-text"><strong>Ne jamais remplacer Syne par une autre police de titre</strong> — Inter, Roboto, Arial sont interdits pour les titres. Syne est la police signature du studio.</div>
+      </div>
+      <div class="dont-item">
+        <div class="dont-icon">✕</div>
+        <div class="dont-text"><strong>Ne jamais utiliser des fonds clairs dans les visuels clients</strong> — l'identité de Ngondet Studio repose sur le contraste nuit / lumière. Un fond blanc trahit le positionnement.</div>
+      </div>
+      <div class="dont-item">
+        <div class="dont-icon">✕</div>
+        <div class="dont-text"><strong>Ne jamais supprimer la mention de contrôle expert</strong> — dans toute communication, la validation humaine doit être mentionnée. C'est le cœur de la promesse différenciante.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="text-align:center;padding:40px 0 0;">
+    <div style="font-family:var(--font-display);font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--white-40);">Ngondet Studio · Charte Graphique · 2025</div>
+    <div style="font-size:12px;color:var(--white-40);margin-top:6px;font-style:italic;">"Ngondet" — la lune, en myènè</div>
+  </div>
+
+</div>
+
+<script>
+  function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function createStars(containerId, count) {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      const size = Math.random() < 0.12 ? 2.5 : Math.random() < 0.35 ? 1.8 : 1;
+      const opacity = randBetween(0.2, 0.85);
+      const dur = randBetween(2.5, 6);
+      const delay = randBetween(0, 5);
+      s.style.cssText = `position:absolute;border-radius:50%;background:white;width:${size}px;height:${size}px;top:${randBetween(0,100)}%;left:${randBetween(0,100)}%;--op-min:${(opacity*0.3).toFixed(2)};--op-max:${opacity.toFixed(2)};--dur:${dur.toFixed(1)}s;--delay:-${delay.toFixed(1)}s;animation:twinkle var(--dur) ease-in-out infinite var(--delay);`;
+      c.appendChild(s);
+    }
+  }
+
+  createStars('stars', 120);
+  createStars('post-stars', 20);
+  createStars('bc-stars', 18);
+</script>
+</body>
+</html>
