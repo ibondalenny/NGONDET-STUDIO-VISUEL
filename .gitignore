@@ -1,3 +1,4 @@
 cred_*.json
 .claude/
 *.env
+FICHE_TECHNIQUE_PRIVEE.md
