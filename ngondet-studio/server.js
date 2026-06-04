@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/clients', require('./routes/clients'))
 app.use('/api/templates', require('./routes/templates'))
 app.use('/api/generer', require('./routes/generate'))
+app.use('/api/generations', require('./routes/generate'))
 app.use('/api/upload', require('./routes/upload'))
 
 // Health check

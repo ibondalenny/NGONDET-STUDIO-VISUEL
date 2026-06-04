@@ -88,12 +88,12 @@ router.post('/', async (req, res) => {
 })
 
 // POST /api/generer/confirmer
-// Envoie le template sélectionné au resume_url de n8n
+// Envoie le template sélectionné au webhook confirmer-template de n8n
 router.post('/confirmer', async (req, res) => {
-  const { generation_id, template_id, resume_url } = req.body
+  const { generation_id, template_id } = req.body
 
-  if (!generation_id || !template_id || !resume_url) {
-    return res.status(400).json({ error: 'generation_id, template_id et resume_url requis' })
+  if (!generation_id || !template_id) {
+    return res.status(400).json({ error: 'generation_id et template_id requis' })
   }
 
   // Mettre à jour le statut
@@ -101,20 +101,26 @@ router.post('/confirmer', async (req, res) => {
     .update({ template_id, statut_generation: 'en_generation' })
     .eq('id', generation_id)
 
-  // Appeler le resume_url de n8n
+  // Appeler le webhook confirmer-template de n8n
+  const confirmUrl = process.env.N8N_CONFIRM_URL || process.env.N8N_WEBHOOK_URL.replace('generer-visuel', 'confirmer-template')
+  let n8nResponse
   try {
-    await axios.post(resume_url, { template_id }, { timeout: 120000 })
+    const { data } = await axios.post(confirmUrl, { generation_id, template_id }, { timeout: 120000 })
+    n8nResponse = data
   } catch (err) {
     await supabase.from('generations').update({ statut_generation: 'erreur' }).eq('id', generation_id)
-    return res.status(500).json({ error: 'Erreur reprise n8n', detail: err.message })
+    return res.status(500).json({ error: 'Erreur génération n8n', detail: err.message })
   }
 
-  // Récupérer la génération mise à jour
+  // Mettre à jour avec l'image si retournée directement
+  if (n8nResponse && n8nResponse.image_url) {
+    await supabase.from('generations')
+      .update({ image_url: n8nResponse.image_url, statut_generation: 'success' })
+      .eq('id', generation_id)
+  }
+
   const { data: updated } = await supabase
-    .from('generations')
-    .select('*')
-    .eq('id', generation_id)
-    .single()
+    .from('generations').select('*').eq('id', generation_id).single()
 
   res.json({ success: true, generation: updated })
 })
@@ -137,6 +143,26 @@ router.post('/callback', async (req, res) => {
 
   if (error) return res.status(500).json({ error: error.message })
   res.json({ success: true, generation: data })
+})
+
+// GET /api/generations
+// Toutes les générations, avec filtres optionnels
+router.get('/', async (req, res) => {
+  const { client_id, type_visuel, statut, limit = 50, offset = 0 } = req.query
+
+  let query = supabase
+    .from('generations')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .range(offset, parseInt(offset) + parseInt(limit) - 1)
+
+  if (client_id) query = query.eq('client_id', client_id)
+  if (type_visuel) query = query.eq('type_visuel', type_visuel)
+  if (statut) query = query.eq('statut_generation', statut)
+
+  const { data, error } = await query
+  if (error) return res.status(500).json({ error: error.message })
+  res.json(data)
 })
 
 module.exports = router
